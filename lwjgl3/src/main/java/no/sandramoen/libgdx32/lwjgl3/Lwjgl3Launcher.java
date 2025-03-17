@@ -21,7 +21,7 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("libGDX jam #31");
+        configuration.setTitle("libGDX jam #32");
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
         //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguard.
         configuration.useVsync(true);
@@ -41,7 +41,7 @@ public class Lwjgl3Launcher {
         if (isFullscreen)
             configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
         else
-            setWindowedMode(.25f, configuration);
+            setWindowedMode(.21f, configuration);
         return configuration;
     }
 
