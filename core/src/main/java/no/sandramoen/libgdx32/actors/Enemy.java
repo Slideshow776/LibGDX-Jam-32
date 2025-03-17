@@ -15,6 +15,7 @@ public class Enemy extends BaseActor {
 
     public int health = 33;
     public static final float MIN_MOVE_DURATION = 0.25f;
+    public static final float MAX_MOVE_DURATION = 0.75f;
 
 
     public Enemy(float x, float y, Stage s) {
@@ -35,7 +36,7 @@ public class Enemy extends BaseActor {
         if (temp > health) {
             addAction(Actions.sequence(
                 Actions.run(() -> take_damage()),
-                Actions.delay(MathUtils.random(MIN_MOVE_DURATION, 0.75f)),
+                Actions.delay(MathUtils.random(MIN_MOVE_DURATION, MAX_MOVE_DURATION)),
                 Actions.run(() -> move())
             ));
         } else if (temp < health) {
@@ -48,12 +49,14 @@ public class Enemy extends BaseActor {
 
 
     private void take_damage() {
+        // particle effect
         HitEffect effect = new HitEffect();
         effect.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2);
         effect.setScale(0.0025f);
         getStage().addActor(effect);
         effect.start();
 
+        // movement animation
         addAction(Actions.sequence(
             Actions.rotateTo(10, 0.1f),
             Actions.rotateTo(-10, 0.2f),

@@ -8,11 +8,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import no.sandramoen.libgdx32.actors.Background;
 import no.sandramoen.libgdx32.actors.Enemy;
 import no.sandramoen.libgdx32.actors.Player;
 import no.sandramoen.libgdx32.actors.Projectile;
+import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 import no.sandramoen.libgdx32.utils.BaseScreen;
 
@@ -20,6 +22,10 @@ public class LevelScreen extends BaseScreen {
 
     Player player;
     Enemy enemy;
+
+    private boolean is_able_to_shoot = true;
+    private float shoot_frequency = Enemy.MAX_MOVE_DURATION;
+    private float shoot_counter = shoot_frequency;
 
 
     public LevelScreen() {
@@ -35,7 +41,7 @@ public class LevelScreen extends BaseScreen {
 
 
     @Override
-    public void update(float delta) {}
+    public void update(float delta) { handle_shoot_cooldown_timer(delta); }
 
 
     @Override
@@ -59,14 +65,17 @@ public class LevelScreen extends BaseScreen {
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
-        enemy.addListener(onTouched());
+        enemy.addListener(onEnemyTouched());
     }
 
 
-    private EventListener onTouched() {
+    private EventListener onEnemyTouched() {
         return new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (is_able_to_shoot == false)
+                    return false;
+
                 enemy.setHealth(enemy.health - 1);
                 return true;
             }
@@ -75,7 +84,14 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (is_able_to_shoot == false) {
+            // TODO: play dud sound, unable to shoot
+            return super.touchDown(screenX, screenY, pointer, button);
+        }
+
         fire_projectile(screenX, screenY);
+        player.shoot();
+        shoot_counter = 0f;
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -98,5 +114,15 @@ public class LevelScreen extends BaseScreen {
 
     private void restart() {
         BaseGame.setActiveScreen(new LevelScreen());
+    }
+
+
+    private void handle_shoot_cooldown_timer(float delta) {
+        if (shoot_counter < shoot_frequency) {
+            shoot_counter += delta;
+            is_able_to_shoot = false;
+        } else {
+            is_able_to_shoot = true;
+        }
     }
 }
