@@ -1,4 +1,7 @@
-# libgdx32
+# LibGDX Jam #32
+A jam made by Tettinger and me.
+
+## libgdx32
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
