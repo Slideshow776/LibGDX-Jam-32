@@ -20,9 +20,10 @@ public class Enemy extends BaseActor {
         super(x, y, s);
         loadImage("player_test");
 
-        setSize(2, 2);
+        setSize(1, 2);
         centerAtPosition(x, y);
         setOrigin(Align.center);
+        setDebug(true);
     }
 
     public void setHealth(int new_health) {

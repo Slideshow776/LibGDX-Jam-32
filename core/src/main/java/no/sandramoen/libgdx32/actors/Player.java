@@ -12,7 +12,7 @@ public class Player extends BaseActor {
         super(x, y, s);
         loadImage("player_test");
 
-        setSize(8, 8);
+        setSize(4, 8);
         centerAtPosition(x, y);
         setOrigin(Align.center);
     }

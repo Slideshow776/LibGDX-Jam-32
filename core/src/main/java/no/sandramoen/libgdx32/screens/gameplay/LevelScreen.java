@@ -4,6 +4,7 @@ package no.sandramoen.libgdx32.screens.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -67,15 +68,27 @@ public class LevelScreen extends BaseScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 enemy.setHealth(enemy.health - 1);
-                Projectile projectile = new Projectile(
-                    player.getX() + player.getWidth() / 2,
-                    player.getY() + player.getHeight() / 2,
-                    mainStage
-                );
-                projectile.move_to(enemy.getX(), enemy.getY(), enemy.getScaleX());
                 return true;
             }
         };
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        fire_projectile(screenX, screenY);
+        return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+
+    private void fire_projectile(int x, int y) {
+        Projectile projectile = new Projectile(
+            player.getX() + player.getWidth() / 2,
+            player.getY() + player.getHeight() / 2,
+            mainStage
+        );
+
+        Vector2 world_coordinates = mainStage.getViewport().unproject(new Vector2(x, y));
+        projectile.move_to(world_coordinates.x, world_coordinates.y, enemy.getScaleX());
     }
 
 

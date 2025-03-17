@@ -20,14 +20,19 @@ public class Projectile extends BaseActor {
 
 
     public void move_to(float x, float y, float enemy_scale) {
-        float final_scale = 0.2f;
+        float final_scale = 0.1f * enemy_scale * 0.1f;
+        final_scale = MathUtils.clamp(final_scale,0.1f,0.2f);
 
         float duration = 0.15f + (1 - enemy_scale);
         duration = MathUtils.clamp(duration, 0.1f, Enemy.MIN_MOVE_DURATION);
 
         addAction(Actions.parallel(
-            Actions.scaleTo(final_scale, final_scale, duration),
-            Actions.moveTo(x, y, duration)
+            Actions.scaleTo(final_scale, final_scale, duration * 1.1f),
+            Actions.moveTo(
+                x - getWidth() / 2,
+                y - getHeight() / 2,
+                duration
+            )
         ));
         addAction(Actions.after(Actions.removeActor()));
     }
