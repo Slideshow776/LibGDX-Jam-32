@@ -1,19 +1,18 @@
 package no.sandramoen.libgdx32.actors;
 
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
 import no.sandramoen.libgdx32.utils.BaseActor;
-import no.sandramoen.libgdx32.utils.GameUtils;
+import no.sandramoen.libgdx32.utils.BaseGame;
 
 
 public class Enemy extends BaseActor {
 
-    public int health = 3;
+    public int health = 33;
 
 
     public Enemy(float x, float y, Stage s) {
@@ -30,7 +29,11 @@ public class Enemy extends BaseActor {
         health = new_health;
 
         if (temp > health) {
-            take_damage();
+            addAction(Actions.sequence(
+                Actions.run(() -> take_damage()),
+                Actions.delay(MathUtils.random(0.25f, 0.75f)),
+                Actions.run(() -> move())
+            ));
         } else if (temp < health) {
             heal();
         }
@@ -45,6 +48,40 @@ public class Enemy extends BaseActor {
             Actions.rotateTo(10, 0.1f),
             Actions.rotateTo(-10, 0.2f),
             Actions.rotateTo(0, 0.1f)
+        ));
+    }
+
+
+    private void move() { // made by chatgpt, tweaked by me
+        float centerX = BaseGame.WORLD_WIDTH / 2 - getWidth() / 2;
+        float centerY = 12.5f;
+
+        float random_angle = MathUtils.random(0f, 360f) * MathUtils.degreesToRadians;
+        float random_radius = MathUtils.random(0.9f, 1.4f); // Random radius for movement
+        float stretchFactorX = 2.7f; // Stretched along the x-axis (e.g., 1.5 means the ellipse is 1.5 times wider than the circle)
+
+        // Convert polar to Cartesian coordinates
+        float x = centerX + random_radius * stretchFactorX * MathUtils.cos(random_angle); // Apply stretch on x
+        float y = centerY + random_radius * MathUtils.sin(random_angle); // Keep y as is, based on angle
+
+        // Add some randomness to the final position
+        float random_x = MathUtils.random(-0.5f, 0.5f);
+        float random_y = MathUtils.random(-0.5f, 0.5f);
+
+        // Apply random offsets
+        x += random_x;
+        y += random_y;
+
+        // Random scale
+        float scale = MathUtils.random(0.75f, 1.25f);
+
+        // Random move duration
+        float move_duration = MathUtils.random(0.2f, 1.0f);
+
+        // Execute the action with the new position
+        addAction(Actions.parallel(
+            Actions.moveTo(x, y, move_duration, Interpolation.circleOut),
+            Actions.scaleTo(scale, scale, move_duration, Interpolation.circleOut)
         ));
     }
 

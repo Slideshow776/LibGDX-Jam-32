@@ -1,3 +1,6 @@
+## my stuff
+/assets/images/included/packed/*
+
 ## Gradle:
 .gradle/
 gradle-app.setting

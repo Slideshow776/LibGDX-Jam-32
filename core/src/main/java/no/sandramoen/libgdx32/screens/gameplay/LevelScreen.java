@@ -22,6 +22,8 @@ public class LevelScreen extends BaseScreen {
     public LevelScreen() {
         initializeActors();
         initializeGUI();
+
+        //Gdx.input.setCursorCatched(true);
     }
 
 
@@ -52,7 +54,7 @@ public class LevelScreen extends BaseScreen {
         new Background(0, 0, mainStage);
         new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
 
-        enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 14.5f, mainStage);
+        enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
         enemy.addListener(onTouched());
     }
 
