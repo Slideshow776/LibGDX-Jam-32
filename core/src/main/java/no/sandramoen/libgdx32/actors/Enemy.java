@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
+import no.sandramoen.libgdx32.actors.particles.HitEffect;
 import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 
@@ -23,8 +24,9 @@ public class Enemy extends BaseActor {
         setSize(1, 2);
         centerAtPosition(x, y);
         setOrigin(Align.center);
-        setDebug(true);
+        //setDebug(true);
     }
+
 
     public void setHealth(int new_health) {
         int temp = health;
@@ -46,6 +48,12 @@ public class Enemy extends BaseActor {
 
 
     private void take_damage() {
+        HitEffect effect = new HitEffect();
+        effect.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2);
+        effect.setScale(0.0025f);
+        getStage().addActor(effect);
+        effect.start();
+
         addAction(Actions.sequence(
             Actions.rotateTo(10, 0.1f),
             Actions.rotateTo(-10, 0.2f),
