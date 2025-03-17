@@ -1,34 +1,19 @@
 package no.sandramoen.libgdx32;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+
+import no.sandramoen.libgdx32.screens.gameplay.LevelScreen;
+import no.sandramoen.libgdx32.utils.BaseGame;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class MyGdxGame extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+public class MyGdxGame extends BaseGame {
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
-    }
+        super.create();
+        //setActiveScreen(new SplashScreen());
+        //setActiveScreen(new MenuScreen());
 
-    @Override
-    public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
-    }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
-        image.dispose();
+        //setActiveScreen(new LevelSelectScreen());
+        setActiveScreen(new LevelScreen());
     }
 }

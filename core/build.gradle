@@ -1,6 +1,43 @@
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.badlogicgames.gdx:gdx-tools:1.12.1"
+  }
+}
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+sourceSets.main {
+  resources.srcDir("$rootDir/assets")
+}
+
+var packTextures = tasks.register("packTextures") {
+  var inputDir = "$rootDir/assets/images/included"
+  var outputDir = "$rootDir/assets/images/included/packed"
+  inputs.dir(inputDir)
+  outputs.dir(outputDir)
+  doLast {
+    delete(outputDir)
+    var settings = new TexturePacker.Settings()
+    settings.combineSubdirectories = true
+    TexturePacker.process(settings, inputDir, outputDir, "images.pack")
+  }
+}
+
+tasks {
+  processResources {
+    dependsOn(packTextures)
+  }
+  compileJava {
+    options.encoding = "UTF-8"
+  }
+}
 dependencies {
   api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
   api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
