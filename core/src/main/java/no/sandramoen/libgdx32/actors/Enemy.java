@@ -13,6 +13,7 @@ import no.sandramoen.libgdx32.utils.BaseGame;
 public class Enemy extends BaseActor {
 
     public int health = 33;
+    public static final float MIN_MOVE_DURATION = 0.25f;
 
 
     public Enemy(float x, float y, Stage s) {
@@ -31,7 +32,7 @@ public class Enemy extends BaseActor {
         if (temp > health) {
             addAction(Actions.sequence(
                 Actions.run(() -> take_damage()),
-                Actions.delay(MathUtils.random(0.25f, 0.75f)),
+                Actions.delay(MathUtils.random(MIN_MOVE_DURATION, 0.75f)),
                 Actions.run(() -> move())
             ));
         } else if (temp < health) {

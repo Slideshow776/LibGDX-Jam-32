@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import no.sandramoen.libgdx32.actors.Background;
 import no.sandramoen.libgdx32.actors.Enemy;
 import no.sandramoen.libgdx32.actors.Player;
+import no.sandramoen.libgdx32.actors.Projectile;
 import no.sandramoen.libgdx32.utils.BaseGame;
 import no.sandramoen.libgdx32.utils.BaseScreen;
 
 public class LevelScreen extends BaseScreen {
 
+    Player player;
     Enemy enemy;
 
 
@@ -52,7 +54,8 @@ public class LevelScreen extends BaseScreen {
 
     private void initializeActors() {
         new Background(0, 0, mainStage);
-        new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
+
+        player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
         enemy.addListener(onTouched());
@@ -64,6 +67,12 @@ public class LevelScreen extends BaseScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 enemy.setHealth(enemy.health - 1);
+                Projectile projectile = new Projectile(
+                    player.getX() + player.getWidth() / 2,
+                    player.getY() + player.getHeight() / 2,
+                    mainStage
+                );
+                projectile.move_to(enemy.getX(), enemy.getY(), enemy.getScaleX());
                 return true;
             }
         };

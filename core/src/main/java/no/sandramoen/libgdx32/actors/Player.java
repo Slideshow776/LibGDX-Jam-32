@@ -1,6 +1,8 @@
 package no.sandramoen.libgdx32.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Align;
+
 import no.sandramoen.libgdx32.utils.BaseActor;
 
 
@@ -12,5 +14,6 @@ public class Player extends BaseActor {
 
         setSize(8, 8);
         centerAtPosition(x, y);
+        setOrigin(Align.center);
     }
 }
