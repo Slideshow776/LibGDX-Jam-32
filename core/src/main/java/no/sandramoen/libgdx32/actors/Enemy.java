@@ -52,7 +52,7 @@ public class Enemy extends BaseActor {
         // particle effect
         HitEffect effect = new HitEffect();
         effect.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2);
-        effect.setScale(0.0025f);
+        effect.setScale(0.002f * getScaleX());
         getStage().addActor(effect);
         effect.start();
 
