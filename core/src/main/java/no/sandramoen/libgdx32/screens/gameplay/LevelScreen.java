@@ -4,6 +4,7 @@ package no.sandramoen.libgdx32.screens.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,9 +26,15 @@ public class LevelScreen extends BaseScreen {
 
     private final boolean IS_MUSIC_ENABLED = true;
 
-    private boolean is_able_to_shoot = true;
-    private float shoot_frequency = Enemy.MAX_MOVE_DURATION;
-    private float shoot_counter = shoot_frequency;
+    private boolean is_game_over = false;
+
+    private boolean is_player_able_to_shoot = true;
+    private float player_shoot_frequency = Enemy.MAX_MOVE_DURATION;
+    private float player_shoot_counter = player_shoot_frequency;
+
+    private boolean is_enemy_able_to_shoot = true;
+    private float enemy_shoot_frequency = 2.0f;
+    private float enemy_shoot_counter = 0f;
 
 
     public LevelScreen() {
@@ -51,11 +58,13 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public void update(float delta) {
-        handle_shoot_cooldown_timer(delta);
-        if (AssetLoader.ambientMusic.getVolume() > 0.4f)
-            AssetLoader.ambientMusic.setVolume(AssetLoader.ambientMusic.getVolume() - delta * 0.1f);
-        if (AssetLoader.levelMusic.getVolume() < 0.75f)
-            AssetLoader.levelMusic.setVolume(AssetLoader.levelMusic.getVolume() + delta * 0.05f);
+        player_shoot_frequency = enemy.move_duration;
+        handle_player_shoot_cooldown_timer(delta);
+
+        handle_enemy_shoot_cooldown_timer(delta);
+        handle_enemy_shooting();
+
+        handle_music_volume(delta);
     }
 
 
@@ -95,42 +104,52 @@ public class LevelScreen extends BaseScreen {
         return new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (is_able_to_shoot == false)
+                if (is_player_able_to_shoot == false)
                     return false;
 
                 enemy.setHealth(enemy.health - 1);
+                if (enemy.health <= 0)
+                    set_game_over();
                 return true;
             }
         };
     }
 
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (is_able_to_shoot == false) {
+        if (is_player_able_to_shoot == false) {
             // TODO: play dud sound, unable to shoot
             return super.touchDown(screenX, screenY, pointer, button);
         }
 
-        fire_projectile(screenX, screenY);
+        Vector2 world_coordinates = mainStage.getViewport().unproject(new Vector2(screenX, screenY));
+        fire_projectile( // at the enemy
+            new Vector2(
+                player.getX() + player.getWidth() / 2,
+                player.getY() + player.getHeight() / 2
+            ),
+            new Vector2(world_coordinates),
+            true
+        );
         player.shoot();
-        shoot_counter = 0f;
+        player_shoot_counter = 0f;
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
 
-    private void fire_projectile(int x, int y) {
-        Projectile projectile = new Projectile(
-            player.getX() + player.getWidth() / 2,
-            player.getY() + player.getHeight() / 2,
-            mainStage
-        );
-
-        Vector2 world_coordinates = mainStage.getViewport().unproject(new Vector2(x, y));
-        projectile.move_to(world_coordinates.x, world_coordinates.y, enemy.getScaleX());
+    private void fire_projectile(Vector2 start_position, Vector2 end_position, boolean is_near_to_far) {
+        Projectile projectile = new Projectile(start_position.x, start_position.y, mainStage);
+        if (is_near_to_far)
+            projectile.move_near_to_far(end_position.x, end_position.y, enemy.getScaleX());
+        else
+            projectile.move_far_to_near(end_position.x, end_position.y, enemy.getScaleX());
     }
 
 
-    private void initializeGUI() {
+    private void set_game_over() {
+        enemy.die();
+        is_game_over = true;
     }
 
 
@@ -139,12 +158,56 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void handle_shoot_cooldown_timer(float delta) {
-        if (shoot_counter < shoot_frequency) {
-            shoot_counter += delta;
-            is_able_to_shoot = false;
+    private void handle_player_shoot_cooldown_timer(float delta) {
+        if (player_shoot_counter < player_shoot_frequency) {
+            player_shoot_counter += delta;
+            is_player_able_to_shoot = false;
         } else {
-            is_able_to_shoot = true;
+            is_player_able_to_shoot = true;
         }
+    }
+
+
+    private void handle_enemy_shoot_cooldown_timer(float delta) {
+        if (enemy_shoot_counter < enemy_shoot_frequency) {
+            enemy_shoot_counter += delta;
+            is_enemy_able_to_shoot = false;
+        } else {
+            enemy_shoot_counter = 0f;
+            is_enemy_able_to_shoot = true;
+        }
+    }
+
+
+    private void handle_enemy_shooting() {
+        if (is_enemy_able_to_shoot == true){
+            fire_projectile( // at the player
+                new Vector2(
+                    enemy.getX() + enemy.getWidth() / 2,
+                    enemy.getY() + enemy.getHeight() / 2
+                ),
+                new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2),
+                false
+            );
+        }
+    }
+
+
+    private void handle_music_volume(float delta) {
+        if (is_game_over) { // turn music down, ambient up
+            if (AssetLoader.ambientMusic.getVolume() <= 1.0f)
+                AssetLoader.ambientMusic.setVolume(MathUtils.clamp(AssetLoader.ambientMusic.getVolume() + delta * 0.1f, 0f, 1f));
+            if (AssetLoader.levelMusic.getVolume() > 0.0f)
+                AssetLoader.levelMusic.setVolume(MathUtils.clamp(AssetLoader.levelMusic.getVolume() - delta * 0.1f, 0f, 1f));
+        } else { // turn music up, ambient down
+            if (AssetLoader.ambientMusic.getVolume() > 0.4f)
+                AssetLoader.ambientMusic.setVolume(MathUtils.clamp(AssetLoader.ambientMusic.getVolume() - delta * 0.1f, 0f, 1f));
+            if (AssetLoader.levelMusic.getVolume() < 0.75f)
+                AssetLoader.levelMusic.setVolume(MathUtils.clamp(AssetLoader.levelMusic.getVolume() + delta * 0.05f, 0f, 1f));
+        }
+    }
+
+
+    private void initializeGUI() {
     }
 }

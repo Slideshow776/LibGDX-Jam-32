@@ -14,11 +14,12 @@ import no.sandramoen.libgdx32.utils.BaseGame;
 
 public class Enemy extends BaseActor {
 
-    public int health = 33;
     public static final float MIN_MOVE_DURATION = 0.25f;
     public static final float MAX_MOVE_DURATION = 0.75f;
 
-    private float move_duration = 0f;
+    public int health = 3;
+    public float move_duration = 0f;
+
     private float elapsedTime = 0;
 
 
@@ -67,9 +68,14 @@ public class Enemy extends BaseActor {
         } else if (temp < health) {
             heal();
         }
+    }
 
-        if (health <= 0)
-            die();
+
+    public void die() {
+        addAction(Actions.sequence(
+            Actions.fadeOut(0.6f),
+            Actions.removeActor()
+        ));
     }
 
 
@@ -125,9 +131,4 @@ public class Enemy extends BaseActor {
 
 
     private void heal() {}
-
-
-    private void die() {
-        setOpacity(0);
-    }
 }
