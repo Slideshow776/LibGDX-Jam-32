@@ -27,12 +27,11 @@ public class AssetLoader implements AssetErrorListener {
     public static String shockwaveShader;
     public static String backgroundShader;
 
-    public static Sound click1Sound;
-    public static Sound hoverOverEnterSound;
+    //public static Sound click1Sound;
 
     public static Array<Music> music;
     public static Music levelMusic;
-    public static Music levelSelectMusic;
+    public static Music ambientMusic;
 
     static {
         long time = System.currentTimeMillis();
@@ -65,11 +64,10 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager.load("images/included/packed/images.pack.atlas", TextureAtlas.class);
 
         // music
-        //BaseGame.assetManager.load("audio/music/388340__phlair__dungeon-ambiance.ogg", Music.class);
+        BaseGame.assetManager.load("audio/music/ambient_wind.wav", Music.class);
 
         // sounds
-        BaseGame.assetManager.load("audio/sound/click1.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sound/hoverOverEnter.wav", Sound.class);
+        //BaseGame.assetManager.load("audio/sound/click1.wav", Sound.class);
 
         // i18n
 
@@ -96,12 +94,11 @@ public class AssetLoader implements AssetErrorListener {
 
         // music
         music = new Array();
-        //levelMusic = BaseGame.assetManager.get("audio/music/512360__jackylacracotte__epic-ambient-track.ogg", Music.class);
-        //music.add(levelMusic);
+        ambientMusic = BaseGame.assetManager.get("audio/music/ambient_wind.wav", Music.class);
+        music.add(levelMusic);
 
         // sounds
-        click1Sound = BaseGame.assetManager.get("audio/sound/click1.wav", Sound.class);
-        hoverOverEnterSound = BaseGame.assetManager.get("audio/sound/hoverOverEnter.wav", Sound.class);
+        //click1Sound = BaseGame.assetManager.get("audio/sound/click1.wav", Sound.class);
 
         // i18n
 

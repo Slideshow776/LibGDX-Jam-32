@@ -57,7 +57,7 @@ public class BaseSlider extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 setChangedValue(type);
-                AssetLoader.click1Sound.play(BaseGame.musicVolume);
+                //AssetLoader.click1Sound.play(BaseGame.musicVolume);
                 GameUtils.saveGameState();
             }
         });
@@ -114,7 +114,7 @@ public class BaseSlider extends Table {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 label.setColor(Color.GRAY);
-                AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
+                //AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
                 super.enter(event, x, y, pointer, fromActor);
             }
 

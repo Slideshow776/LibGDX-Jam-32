@@ -13,6 +13,7 @@ import no.sandramoen.libgdx32.actors.ParallaxBackground;
 import no.sandramoen.libgdx32.actors.Enemy;
 import no.sandramoen.libgdx32.actors.Player;
 import no.sandramoen.libgdx32.actors.Projectile;
+import no.sandramoen.libgdx32.utils.AssetLoader;
 import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 import no.sandramoen.libgdx32.utils.BaseScreen;
@@ -31,6 +32,10 @@ public class LevelScreen extends BaseScreen {
         initializeActors();
         initializeGUI();
 
+        // music
+        AssetLoader.ambientMusic.setLooping(true);
+        AssetLoader.ambientMusic.play();
+
         //Gdx.input.setCursorCatched(true);
     }
 
@@ -40,7 +45,12 @@ public class LevelScreen extends BaseScreen {
 
 
     @Override
-    public void update(float delta) { handle_shoot_cooldown_timer(delta); }
+    public void update(float delta) {
+        handle_shoot_cooldown_timer(delta);
+        if (AssetLoader.ambientMusic.getVolume() > 0.4f)
+            AssetLoader.ambientMusic.setVolume(AssetLoader.ambientMusic.getVolume() - delta * 0.1f);
+        System.out.println(AssetLoader.ambientMusic.getVolume());
+    }
 
 
     @Override

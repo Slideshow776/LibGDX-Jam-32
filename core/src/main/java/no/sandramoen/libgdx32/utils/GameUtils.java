@@ -38,7 +38,7 @@ public class GameUtils {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
                 widget.setColor(Color.FIREBRICK);
-                AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
+                //AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
             }
 
             @Override
@@ -83,7 +83,7 @@ public class GameUtils {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 widget.addAction(Actions.color(enterColor, 0.125f));
-                AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
+                //AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
                 super.enter(event, x, y, pointer, fromActor);
             }
 

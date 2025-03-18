@@ -18,6 +18,7 @@ public class Enemy extends BaseActor {
     public static final float MAX_MOVE_DURATION = 0.75f;
 
     private float move_duration = 0f;
+    private float elapsedTime = 0;
 
 
     public Enemy(float x, float y, Stage s) {
@@ -30,7 +31,6 @@ public class Enemy extends BaseActor {
         //setDebug(true);
     }
 
-    private float elapsedTime = 0;
 
     @Override
     public void act(float delta) {
@@ -48,7 +48,7 @@ public class Enemy extends BaseActor {
 
         // Apply movement and rotation
         moveBy(offset, -offset); // Moves left/right and up/down
-        setRotation(250 * -offset);
+        setRotation(250 * -offset); // WARNING: overrides other set rotations
     }
 
 

@@ -54,7 +54,7 @@ public class BaseCheckbox extends Table {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
                 label.setColor(Color.FIREBRICK);
-                AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
+                //AssetLoader.hoverOverEnterSound.play(BaseGame.soundVolume);
             }
 
             @Override

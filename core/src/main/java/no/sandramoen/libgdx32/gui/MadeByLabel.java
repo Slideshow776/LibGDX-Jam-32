@@ -35,7 +35,7 @@ public class MadeByLabel extends TypingLabel {
     }
 
     private void openURIWithDelay() {
-        AssetLoader.click1Sound.play(BaseGame.soundVolume);
+        //AssetLoader.click1Sound.play(BaseGame.soundVolume);
         addAction(Actions.sequence(
                 Actions.delay(.5f),
                 Actions.run(() -> Gdx.net.openURI("https://sandramoen.no"))
