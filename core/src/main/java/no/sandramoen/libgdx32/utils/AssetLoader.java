@@ -64,6 +64,7 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager.load("images/included/packed/images.pack.atlas", TextureAtlas.class);
 
         // music
+        BaseGame.assetManager.load("audio/music/361424__furbyguy__synth-metal-rock-loop.wav", Music.class);
         BaseGame.assetManager.load("audio/music/ambient_wind.wav", Music.class);
 
         // sounds
@@ -94,6 +95,7 @@ public class AssetLoader implements AssetErrorListener {
 
         // music
         music = new Array();
+        levelMusic = BaseGame.assetManager.get("audio/music/361424__furbyguy__synth-metal-rock-loop.wav", Music.class);
         ambientMusic = BaseGame.assetManager.get("audio/music/ambient_wind.wav", Music.class);
         music.add(levelMusic);
 

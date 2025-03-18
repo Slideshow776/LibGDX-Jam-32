@@ -23,6 +23,8 @@ public class LevelScreen extends BaseScreen {
     Player player;
     Enemy enemy;
 
+    private final boolean IS_MUSIC_ENABLED = true;
+
     private boolean is_able_to_shoot = true;
     private float shoot_frequency = Enemy.MAX_MOVE_DURATION;
     private float shoot_counter = shoot_frequency;
@@ -33,8 +35,11 @@ public class LevelScreen extends BaseScreen {
         initializeGUI();
 
         // music
+        AssetLoader.levelMusic.setLooping(true);
+        AssetLoader.levelMusic.setVolume(0f);
+        if (IS_MUSIC_ENABLED) AssetLoader.levelMusic.play();
         AssetLoader.ambientMusic.setLooping(true);
-        AssetLoader.ambientMusic.play();
+        if (IS_MUSIC_ENABLED) AssetLoader.ambientMusic.play();
 
         //Gdx.input.setCursorCatched(true);
     }
@@ -49,7 +54,8 @@ public class LevelScreen extends BaseScreen {
         handle_shoot_cooldown_timer(delta);
         if (AssetLoader.ambientMusic.getVolume() > 0.4f)
             AssetLoader.ambientMusic.setVolume(AssetLoader.ambientMusic.getVolume() - delta * 0.1f);
-        System.out.println(AssetLoader.ambientMusic.getVolume());
+        if (AssetLoader.levelMusic.getVolume() < 0.75f)
+            AssetLoader.levelMusic.setVolume(AssetLoader.levelMusic.getVolume() + delta * 0.05f);
     }
 
 
