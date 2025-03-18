@@ -25,6 +25,8 @@ public class Player extends BaseActor {
     public Player(float x, float y, Stage s) {
         super(x, y, s);
         loadImage("player_test");
+
+        // arm
         arm = AssetLoader.textureAtlas.createSprite(ARM_NAME);
         if (arm == null)
             Gdx.app.error(getClass().getSimpleName(), "Error: arm is null. Are you sure the image '" + ARM_NAME + "' exists?");
@@ -32,6 +34,8 @@ public class Player extends BaseActor {
         arm.setSize(4, 4);
         arm.setOrigin(0.6f, 0f);
         arm.setOriginBasedPosition(x-0.1f, y);
+
+        // body
         setSize(4, 8);
         centerAtPosition(x, y);
         setOrigin(Align.center);
@@ -60,6 +64,5 @@ public class Player extends BaseActor {
         super.positionChanged();
         if(arm != null) // can be null in constructor, before creating arm
             arm.setOriginBasedPosition(getX(Align.center)-0.1f, getY(Align.center));
-
     }
 }

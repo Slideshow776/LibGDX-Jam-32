@@ -8,13 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
-import no.sandramoen.libgdx32.actors.Background;
+import no.sandramoen.libgdx32.actors.ParallaxBackground;
 import no.sandramoen.libgdx32.actors.Enemy;
 import no.sandramoen.libgdx32.actors.Player;
 import no.sandramoen.libgdx32.actors.Projectile;
-import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 import no.sandramoen.libgdx32.utils.BaseScreen;
 
@@ -60,7 +58,8 @@ public class LevelScreen extends BaseScreen {
 
 
     private void initializeActors() {
-        new Background(0, 0, mainStage);
+        for (int i = 0; i <= 4; i++)
+            new ParallaxBackground(0, 0, mainStage, "parallax_backgrounds/" + i, (i + 1) * -0.75f * (i + 0.05f));
 
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
 
