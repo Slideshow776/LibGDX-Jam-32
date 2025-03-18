@@ -19,12 +19,12 @@ public class Player extends BaseActor {
     public static final float SHOOT_COOL_DOWN = Enemy.MAX_MOVE_DURATION;
 
     public Sprite arm;
-    private static final String ARM_NAME = "arm_test";
+    private static final String ARM_NAME = "player/arm_test";
     private Vector3 temp = new Vector3();
 
     public Player(float x, float y, Stage s) {
         super(x, y, s);
-        loadImage("player_test");
+        loadImage("player/player");
 
         // arm
         arm = AssetLoader.textureAtlas.createSprite(ARM_NAME);

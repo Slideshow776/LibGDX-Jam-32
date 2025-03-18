@@ -13,6 +13,7 @@ import no.sandramoen.libgdx32.actors.ParallaxBackground;
 import no.sandramoen.libgdx32.actors.Enemy;
 import no.sandramoen.libgdx32.actors.Player;
 import no.sandramoen.libgdx32.actors.Projectile;
+import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 import no.sandramoen.libgdx32.utils.BaseScreen;
 
@@ -58,6 +59,10 @@ public class LevelScreen extends BaseScreen {
 
 
     private void initializeActors() {
+        BaseActor sky_background = new BaseActor(0f, 0f, mainStage);
+        sky_background.loadImage("parallax_backgrounds/-1");
+        sky_background.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
+
         for (int i = 0; i <= 4; i++)
             new ParallaxBackground(0, 0, mainStage, "parallax_backgrounds/" + i, (i + 1) * -0.75f * (i + 0.05f));
 

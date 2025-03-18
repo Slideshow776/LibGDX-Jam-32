@@ -20,7 +20,7 @@ public class Enemy extends BaseActor {
 
     public Enemy(float x, float y, Stage s) {
         super(x, y, s);
-        loadImage("player_test");
+        loadImage("enemy/enemy");
 
         setSize(1, 2);
         centerAtPosition(x, y);
