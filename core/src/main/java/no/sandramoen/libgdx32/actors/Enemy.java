@@ -17,6 +17,8 @@ public class Enemy extends BaseActor {
     public static final float MIN_MOVE_DURATION = 0.25f;
     public static final float MAX_MOVE_DURATION = 0.75f;
 
+    private float move_duration = 0f;
+
 
     public Enemy(float x, float y, Stage s) {
         super(x, y, s);
@@ -28,15 +30,37 @@ public class Enemy extends BaseActor {
         //setDebug(true);
     }
 
+    private float elapsedTime = 0;
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        // Update elapsed time
+        elapsedTime += delta;
+
+        // Floating effect parameters
+        float amplitude = 0.005f; // Maximum movement amount
+        float speed = 1f; // Oscillation speed
+
+        // Calculate sine-based movement
+        float offset = MathUtils.sin(elapsedTime * speed) * amplitude;
+
+        // Apply movement and rotation
+        moveBy(offset, -offset); // Moves left/right and up/down
+        setRotation(250 * -offset);
+    }
+
 
     public void setHealth(int new_health) {
         int temp = health;
         health = new_health;
 
         if (temp > health) {
+            move_duration = MathUtils.random(MIN_MOVE_DURATION, MAX_MOVE_DURATION);
             addAction(Actions.sequence(
                 Actions.run(() -> take_damage()),
-                Actions.delay(MathUtils.random(MIN_MOVE_DURATION, MAX_MOVE_DURATION)),
+                Actions.delay(move_duration),
                 Actions.run(() -> move())
             ));
         } else if (temp < health) {
@@ -58,9 +82,8 @@ public class Enemy extends BaseActor {
 
         // movement animation
         addAction(Actions.sequence(
-            Actions.rotateTo(10, 0.1f),
-            Actions.rotateTo(-10, 0.2f),
-            Actions.rotateTo(0, 0.1f)
+            Actions.scaleTo(1.1f, 0.9f, move_duration * (1 / 5f)),
+            Actions.scaleTo(1.0f, 1.0f, move_duration * (4 / 5f), Interpolation.bounceOut)
         ));
     }
 

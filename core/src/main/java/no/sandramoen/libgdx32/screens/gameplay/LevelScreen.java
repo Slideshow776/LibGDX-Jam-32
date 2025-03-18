@@ -59,6 +59,7 @@ public class LevelScreen extends BaseScreen {
 
 
     private void initializeActors() {
+        // background
         BaseActor sky_background = new BaseActor(0f, 0f, mainStage);
         sky_background.loadImage("parallax_backgrounds/-1");
         sky_background.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
@@ -66,6 +67,7 @@ public class LevelScreen extends BaseScreen {
         for (int i = 0; i <= 4; i++)
             new ParallaxBackground(0, 0, mainStage, "parallax_backgrounds/" + i, (i + 1) * -0.75f * (i + 0.05f));
 
+        // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);

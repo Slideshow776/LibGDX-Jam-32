@@ -21,6 +21,7 @@ public class Player extends BaseActor {
     public Sprite arm;
     private static final String ARM_NAME = "player/arm_test";
     private Vector3 temp = new Vector3();
+    private float elapsedTime = 0;
 
     public Player(float x, float y, Stage s) {
         super(x, y, s);
@@ -39,6 +40,25 @@ public class Player extends BaseActor {
         setSize(4, 8);
         centerAtPosition(x, y);
         setOrigin(Align.center);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        // Update elapsed time
+        elapsedTime += delta;
+
+        // Floating effect parameters
+        float amplitude = 0.005f; // Maximum movement amount
+        float speed = 1f; // Oscillation speed
+
+        // Calculate sine-based movement
+        float offset = MathUtils.sin(elapsedTime * speed) * amplitude;
+
+        // Apply movement and rotation
+        moveBy(-offset, offset); // Moves left/right and up/down
+        setRotation(250 * offset);
     }
 
 
