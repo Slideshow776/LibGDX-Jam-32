@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
 import no.sandramoen.libgdx32.actors.particles.HitEffect;
+import no.sandramoen.libgdx32.actors.utils.Wobble;
 import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 
@@ -83,6 +84,7 @@ public class Enemy extends BaseActor {
         // movement animation
         addAction(Actions.sequence(
             Actions.scaleTo(1.1f, 0.9f, move_duration * (1 / 5f)),
+            Wobble.shakeCamera(0.5f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f),
             Actions.scaleTo(1.0f, 1.0f, move_duration * (4 / 5f), Interpolation.bounceOut)
         ));
     }
@@ -92,7 +94,7 @@ public class Enemy extends BaseActor {
         float centerX = BaseGame.WORLD_WIDTH / 2 - getWidth() / 2;
         float centerY = 12.5f;
 
-        float random_angle = MathUtils.random(0f, 360f) * MathUtils.degreesToRadians;
+        float random_angle = MathUtils.random(0f, MathUtils.PI2);
         float random_radius = MathUtils.random(0.9f, 1.4f); // Random radius for movement
         float stretchFactorX = 2.7f; // Stretched along the x-axis (e.g., 1.5 means the ellipse is 1.5 times wider than the circle)
 
