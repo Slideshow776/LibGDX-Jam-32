@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
@@ -19,7 +20,8 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen() {
         mainStage = new Stage();
-        mainStage.setViewport(new ExtendViewport(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT));
+        mainStage.setViewport(new FillViewport(BaseGame.WORLD_WIDTH - 1f, BaseGame.WORLD_HEIGHT - 1f));
+        mainStage.getCamera().position.add(0.5f, 0.5f, 0f);
 
         uiTable = new Table();
         uiTable.setFillParent(true);
@@ -71,6 +73,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         mainStage.getViewport().update(width, height, true);
+        mainStage.getCamera().position.add(0.5f, 0.5f, 0f);
         uiStage.getViewport().update(width, height, true);
     }
 
