@@ -43,6 +43,10 @@ dependencies {
 
 }
 
+processResources {
+  inputs.files(project(':core').tasks.named('packTextures').get().outputs.files)
+}
+
 def os = System.properties['os.name'].toLowerCase()
 
 run {
