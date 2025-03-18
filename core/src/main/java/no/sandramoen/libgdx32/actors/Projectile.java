@@ -19,7 +19,7 @@ public class Projectile extends BaseActor {
     }
 
 
-    public void move_to(float x, float y, float enemy_scale) {
+    public void move_near_to_far(float x, float y, float enemy_scale) {
         float final_scale = 0.1f * enemy_scale * 0.1f;
         final_scale = MathUtils.clamp(final_scale,0.1f,0.2f);
 
@@ -36,4 +36,27 @@ public class Projectile extends BaseActor {
         ));
         addAction(Actions.after(Actions.removeActor()));
     }
+
+
+    public void move_far_to_near(float x, float y, float enemy_scale) {
+        setScale(0.1f * enemy_scale * 0.1f);
+        rotateBy(180);
+
+        float final_scale = 1f;
+
+        float duration = 0.15f + (1 - enemy_scale);
+        duration = MathUtils.clamp(duration, 0.1f, Enemy.MIN_MOVE_DURATION);
+
+        addAction(Actions.parallel(
+            Actions.scaleTo(final_scale, final_scale, duration * 1.1f),
+            Actions.moveTo(
+                x - getWidth() / 2,
+                y - getHeight() / 2,
+                duration
+            )
+        ));
+        addAction(Actions.after(Actions.removeActor()));
+    }
+
+
 }
