@@ -4,6 +4,7 @@ package no.sandramoen.libgdx32.screens.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,6 +27,7 @@ public class LevelScreen extends BaseScreen {
     private final boolean IS_MUSIC_ENABLED = true;
 
     private boolean is_able_to_shoot = true;
+    private boolean is_game_over = false;
     private float shoot_frequency = Enemy.MAX_MOVE_DURATION;
     private float shoot_counter = shoot_frequency;
 
@@ -52,10 +54,7 @@ public class LevelScreen extends BaseScreen {
     @Override
     public void update(float delta) {
         handle_shoot_cooldown_timer(delta);
-        if (AssetLoader.ambientMusic.getVolume() > 0.4f)
-            AssetLoader.ambientMusic.setVolume(AssetLoader.ambientMusic.getVolume() - delta * 0.1f);
-        if (AssetLoader.levelMusic.getVolume() < 0.75f)
-            AssetLoader.levelMusic.setVolume(AssetLoader.levelMusic.getVolume() + delta * 0.05f);
+        handle_music_volume(delta);
     }
 
 
@@ -99,6 +98,8 @@ public class LevelScreen extends BaseScreen {
                     return false;
 
                 enemy.setHealth(enemy.health - 1);
+                if (enemy.health <= 0)
+                    set_game_over();
                 return true;
             }
         };
@@ -130,7 +131,9 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void initializeGUI() {
+    private void set_game_over() {
+        enemy.die();
+        is_game_over = true;
     }
 
 
@@ -146,5 +149,24 @@ public class LevelScreen extends BaseScreen {
         } else {
             is_able_to_shoot = true;
         }
+    }
+
+
+    private void handle_music_volume(float delta) {
+        if (is_game_over) {
+            if (AssetLoader.ambientMusic.getVolume() <= 1.0f)
+                AssetLoader.ambientMusic.setVolume(MathUtils.clamp(AssetLoader.ambientMusic.getVolume() + delta * 0.1f, 0f, 1f));
+            if (AssetLoader.levelMusic.getVolume() > 0.0f)
+                AssetLoader.levelMusic.setVolume(MathUtils.clamp(AssetLoader.levelMusic.getVolume() - delta * 0.1f, 0f, 1f));
+        } else {
+            if (AssetLoader.ambientMusic.getVolume() > 0.4f)
+                AssetLoader.ambientMusic.setVolume(MathUtils.clamp(AssetLoader.ambientMusic.getVolume() - delta * 0.1f, 0f, 1f));
+            if (AssetLoader.levelMusic.getVolume() < 0.75f)
+                AssetLoader.levelMusic.setVolume(MathUtils.clamp(AssetLoader.levelMusic.getVolume() + delta * 0.05f, 0f, 1f));
+        }
+    }
+
+
+    private void initializeGUI() {
     }
 }

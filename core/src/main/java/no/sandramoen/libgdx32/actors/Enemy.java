@@ -13,7 +13,7 @@ import no.sandramoen.libgdx32.utils.BaseGame;
 
 public class Enemy extends BaseActor {
 
-    public int health = 33;
+    public int health = 3;
     public static final float MIN_MOVE_DURATION = 0.25f;
     public static final float MAX_MOVE_DURATION = 0.75f;
 
@@ -66,9 +66,11 @@ public class Enemy extends BaseActor {
         } else if (temp < health) {
             heal();
         }
+    }
 
-        if (health <= 0)
-            die();
+
+    public void die() {
+        setOpacity(0);
     }
 
 
@@ -123,9 +125,4 @@ public class Enemy extends BaseActor {
 
 
     private void heal() {}
-
-
-    private void die() {
-        setOpacity(0);
-    }
 }
