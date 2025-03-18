@@ -10,9 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import no.sandramoen.libgdx32.actors.player.HUD;
 import no.sandramoen.libgdx32.actors.ParallaxBackground;
 import no.sandramoen.libgdx32.actors.Enemy;
-import no.sandramoen.libgdx32.actors.Player;
+import no.sandramoen.libgdx32.actors.player.Player;
 import no.sandramoen.libgdx32.actors.Projectile;
 import no.sandramoen.libgdx32.utils.AssetLoader;
 import no.sandramoen.libgdx32.utils.BaseActor;
@@ -23,8 +24,9 @@ public class LevelScreen extends BaseScreen {
 
     Player player;
     Enemy enemy;
+    HUD hud;
 
-    private final boolean IS_MUSIC_ENABLED = true;
+    private final boolean IS_MUSIC_ENABLED = false;
 
     private boolean is_game_over = false;
 
@@ -58,13 +60,17 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public void update(float delta) {
+        handle_music_volume(delta);
+
+        if (is_game_over)
+            return;
+
         player_shoot_frequency = enemy.move_duration;
         handle_player_shoot_cooldown_timer(delta);
 
         handle_enemy_shoot_cooldown_timer(delta);
         handle_enemy_shooting();
 
-        handle_music_volume(delta);
     }
 
 
@@ -97,6 +103,8 @@ public class LevelScreen extends BaseScreen {
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
         enemy.addListener(onEnemyTouched());
+
+        hud = new HUD(0f, 0f, mainStage);
     }
 
 
@@ -104,7 +112,7 @@ public class LevelScreen extends BaseScreen {
         return new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (is_player_able_to_shoot == false)
+                if (is_player_able_to_shoot == false || is_game_over == true)
                     return false;
 
                 enemy.setHealth(enemy.health - 1);
@@ -118,6 +126,9 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (is_game_over)
+            return super.touchDown(screenX, screenY, pointer, button);
+
         if (is_player_able_to_shoot == false) {
             // TODO: play dud sound, unable to shoot
             return super.touchDown(screenX, screenY, pointer, button);
@@ -148,7 +159,6 @@ public class LevelScreen extends BaseScreen {
 
 
     private void set_game_over() {
-        enemy.die();
         is_game_over = true;
     }
 
@@ -189,6 +199,10 @@ public class LevelScreen extends BaseScreen {
                 new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2),
                 false
             );
+            player.setHealth(player.health - 1);
+            hud.fade_in_and_out();
+            if (player.health <= 0)
+                set_game_over();
         }
     }
 

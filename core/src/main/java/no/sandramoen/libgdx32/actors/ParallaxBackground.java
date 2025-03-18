@@ -1,6 +1,7 @@
 package no.sandramoen.libgdx32.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
@@ -21,6 +22,7 @@ public class ParallaxBackground extends BaseActor {
         this.speed = speed;
         setPosition(x, y);
         setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
+        setTouchable(Touchable.disabled);
 
         image1 = new Image(AssetLoader.textureAtlas.findRegion(image_path));
         image1.setSize(getWidth(), getHeight());

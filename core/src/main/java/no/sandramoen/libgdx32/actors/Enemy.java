@@ -37,20 +37,7 @@ public class Enemy extends BaseActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        // Update elapsed time
-        elapsedTime += delta;
-
-        // Floating effect parameters
-        float amplitude = 0.005f; // Maximum movement amount
-        float speed = 1f; // Oscillation speed
-
-        // Calculate sine-based movement
-        float offset = MathUtils.sin(elapsedTime * speed) * amplitude;
-
-        // Apply movement and rotation
-        moveBy(offset, -offset); // Moves left/right and up/down
-        setRotation(250 * -offset); // WARNING: overrides other set rotations
+        float_around_animation(delta);
     }
 
 
@@ -68,10 +55,13 @@ public class Enemy extends BaseActor {
         } else if (temp < health) {
             heal();
         }
+
+        if (health <= 0)
+            die();
     }
 
 
-    public void die() {
+    private void die() {
         addAction(Actions.sequence(
             Actions.fadeOut(0.6f),
             Actions.removeActor()
@@ -90,7 +80,7 @@ public class Enemy extends BaseActor {
         // movement animation
         addAction(Actions.sequence(
             Actions.scaleTo(1.1f, 0.9f, move_duration * (1 / 5f)),
-            Wobble.shakeCamera(0.5f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f),
+            //Wobble.shakeCamera(0.75f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f),
             Actions.scaleTo(1.0f, 1.0f, move_duration * (4 / 5f), Interpolation.bounceOut)
         ));
     }
@@ -127,6 +117,23 @@ public class Enemy extends BaseActor {
             Actions.moveTo(x, y, move_duration, Interpolation.circleOut),
             Actions.scaleTo(scale, scale, move_duration, Interpolation.circleOut)
         ));
+    }
+
+
+    private void float_around_animation(float delta) {
+        // Update elapsed time
+        elapsedTime += delta;
+
+        // Floating effect parameters
+        float amplitude = 0.005f; // Maximum movement amount
+        float speed = 1f; // Oscillation speed
+
+        // Calculate sine-based movement
+        float offset = MathUtils.sin(elapsedTime * speed) * amplitude;
+
+        // Apply movement and rotation
+        moveBy(offset, -offset); // Moves left/right and up/down
+        setRotation(250 * -offset); // WARNING: overrides other set rotations
     }
 
 

@@ -44,7 +44,7 @@ public class Projectile extends BaseActor {
 
         float final_scale = 1f;
 
-        float duration = 0.15f + (1 - enemy_scale);
+        float duration = 0.3f + (1 - enemy_scale);
         duration = MathUtils.clamp(duration, 0.1f, Enemy.MIN_MOVE_DURATION);
 
         addAction(Actions.parallel(
