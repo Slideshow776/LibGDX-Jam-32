@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 public class BaseActor extends Group {
 
     protected static Rectangle worldBounds;
+    private static int ID_COUNTER = 0;
 
     public Animation<TextureRegion> animation;
     private float animationTime = 0f;
@@ -42,7 +43,8 @@ public class BaseActor extends Group {
     public boolean isCollisionEnabled = true;
     public float shakyCamIntensity = .5f;
     public boolean isShakyCam = false;
-    public final int ID = MathUtils.random(1000, 9999);
+
+    public final int ID = (ID_COUNTER++ % 9000) + 1000;
 
     public BaseActor(float x, float y, Stage stage) {
         super();
