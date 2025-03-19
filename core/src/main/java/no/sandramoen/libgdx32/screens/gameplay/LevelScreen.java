@@ -30,13 +30,6 @@ public class LevelScreen extends BaseScreen {
 
     private boolean is_game_over = false;
 
-    private boolean is_player_able_to_shoot = true;
-    private float player_shoot_frequency = Enemy.MAX_MOVE_DURATION;
-    private float player_shoot_counter = player_shoot_frequency;
-
-    private boolean is_enemy_able_to_shoot = true;
-    private float enemy_shoot_frequency = 2.0f;
-    private float enemy_shoot_counter = 0f;
 
 
     public LevelScreen() {
@@ -65,12 +58,9 @@ public class LevelScreen extends BaseScreen {
         if (is_game_over)
             return;
 
-        player_shoot_frequency = enemy.move_duration;
-        handle_player_shoot_cooldown_timer(delta);
+        player.shoot_frequency = enemy.move_duration;
 
-        handle_enemy_shoot_cooldown_timer(delta);
         handle_enemy_shooting();
-
     }
 
 
@@ -100,6 +90,7 @@ public class LevelScreen extends BaseScreen {
 
         // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
+        player.shield.activate(); // TODO: remove this, only for debugging
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
         enemy.addListener(onEnemyTouched());
@@ -112,7 +103,7 @@ public class LevelScreen extends BaseScreen {
         return new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (is_player_able_to_shoot == false || is_game_over == true)
+                if (player.is_able_to_shoot == false || is_game_over == true)
                     return false;
 
                 enemy.setHealth(enemy.health - 1);
@@ -125,11 +116,11 @@ public class LevelScreen extends BaseScreen {
 
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) { // 0 for left, 1 for right
         if (is_game_over)
             return super.touchDown(screenX, screenY, pointer, button);
 
-        if (is_player_able_to_shoot == false) {
+        if (player.is_able_to_shoot == false) {
             // TODO: play dud sound, unable to shoot
             return super.touchDown(screenX, screenY, pointer, button);
         }
@@ -144,7 +135,6 @@ public class LevelScreen extends BaseScreen {
             true
         );
         player.shoot();
-        player_shoot_counter = 0f;
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -168,41 +158,28 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void handle_player_shoot_cooldown_timer(float delta) {
-        if (player_shoot_counter < player_shoot_frequency) {
-            player_shoot_counter += delta;
-            is_player_able_to_shoot = false;
-        } else {
-            is_player_able_to_shoot = true;
-        }
-    }
-
-
-    private void handle_enemy_shoot_cooldown_timer(float delta) {
-        if (enemy_shoot_counter < enemy_shoot_frequency) {
-            enemy_shoot_counter += delta;
-            is_enemy_able_to_shoot = false;
-        } else {
-            enemy_shoot_counter = 0f;
-            is_enemy_able_to_shoot = true;
-        }
-    }
-
-
     private void handle_enemy_shooting() {
-        if (is_enemy_able_to_shoot == true){
+        if (enemy.is_able_to_shoot == true){
+
+            Vector2 source = new Vector2(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2);
+            Vector2 target = new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2);
+
+            if (player.shield.is_active)
+                target = new Vector2(player.shield.getX() + MathUtils.random(4f, 9f), player.shield.getY() + MathUtils.random(-1f, 1f));
+
             fire_projectile( // at the player
-                new Vector2(
-                    enemy.getX() + enemy.getWidth() / 2,
-                    enemy.getY() + enemy.getHeight() / 2
-                ),
-                new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2),
+                source,
+                target,
                 false
             );
-            player.setHealth(player.health - 1);
-            hud.fade_in_and_out();
-            if (player.health <= 0)
-                set_game_over();
+
+
+            if (player.shield.is_active == false) {
+                player.setHealth(player.health - 1);
+                hud.fade_in_and_out();
+                if (player.health <= 0)
+                    set_game_over();
+            }
         }
     }
 

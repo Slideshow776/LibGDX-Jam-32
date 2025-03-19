@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
 import no.sandramoen.libgdx32.actors.particles.HitEffect;
-import no.sandramoen.libgdx32.actors.utils.Wobble;
 import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
 
@@ -19,7 +18,10 @@ public class Enemy extends BaseActor {
 
     public int health = 3;
     public float move_duration = 0f;
+    public boolean is_able_to_shoot = true;
 
+    private float shoot_frequency = 2.0f;
+    private float shoot_counter = 0f;
     private float elapsedTime = 0;
 
 
@@ -38,6 +40,7 @@ public class Enemy extends BaseActor {
     public void act(float delta) {
         super.act(delta);
         float_around_animation(delta);
+        handle_shoot_cooldown_timer(delta);
     }
 
 
@@ -138,4 +141,15 @@ public class Enemy extends BaseActor {
 
 
     private void heal() {}
+
+
+    private void handle_shoot_cooldown_timer(float delta) {
+        if (shoot_counter < shoot_frequency) {
+            shoot_counter += delta;
+            is_able_to_shoot = false;
+        } else {
+            shoot_counter = 0f;
+            is_able_to_shoot = true;
+        }
+    }
 }

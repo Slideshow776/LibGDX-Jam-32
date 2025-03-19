@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
@@ -22,12 +21,15 @@ public class Player extends BaseActor {
     public static final float SHOOT_COOL_DOWN = Enemy.MAX_MOVE_DURATION;
 
     public Sprite arm;
+    public Shield shield;
     public int health = 3;
+    public boolean is_able_to_shoot = true;
+    public float shoot_frequency = Enemy.MAX_MOVE_DURATION;
+    private float shoot_counter = shoot_frequency;
 
     private static final String ARM_NAME = "player/arm_test";
     private Vector3 temp = new Vector3();
     private float elapsedTime = 0;
-    private Shield shield;
 
     public Player(float x, float y, Stage s) {
         super(x, y, s);
@@ -49,10 +51,7 @@ public class Player extends BaseActor {
 
         shield = new Shield(-2f, 8f, getStage());
         addActor(shield);
-        //shield.setPosition(-1f, 8f);
 
-
-        setTouchable(Touchable.disabled);
         //setDebug(true);
     }
 
@@ -61,6 +60,7 @@ public class Player extends BaseActor {
     public void act(float delta) {
         super.act(delta);
         float_around_animation(delta);
+        handle_shoot_cooldown_timer(delta);
     }
 
 
@@ -75,6 +75,8 @@ public class Player extends BaseActor {
 
 
     public void shoot() {
+        shoot_counter = 0f;
+
         // animation
         addAction(Actions.sequence(
             Actions.scaleTo(0.95f, 1.05f, SHOOT_COOL_DOWN * (1f / 5f)),
@@ -110,6 +112,7 @@ public class Player extends BaseActor {
         addAction(Wobble.shakeCamera(0.75f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f));
     }
 
+
     private void heal() {}
 
 
@@ -135,5 +138,15 @@ public class Player extends BaseActor {
         // Apply movement and rotation
         moveBy(-offset, offset); // Moves left/right and up/down
         setRotation(250 * offset);
+    }
+
+
+    private void handle_shoot_cooldown_timer(float delta) {
+        if (shoot_counter < shoot_frequency) {
+            shoot_counter += delta;
+            is_able_to_shoot = false;
+        } else {
+            is_able_to_shoot = true;
+        }
     }
 }
