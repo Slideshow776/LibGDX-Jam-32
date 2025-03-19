@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
 
 import no.sandramoen.libgdx32.actors.particles.HitEffect;
@@ -33,6 +34,8 @@ public class Enemy extends BaseActor {
         centerAtPosition(x, y);
         setOrigin(Align.center);
         //setDebug(true);
+
+        addAction(charge_shot_animation());
     }
 
 
@@ -150,6 +153,27 @@ public class Enemy extends BaseActor {
         } else {
             shoot_counter = 0f;
             is_able_to_shoot = true;
+            shoot_animation();
         }
+    }
+
+
+    private void shoot_animation() {
+        addAction(Actions.sequence(
+            Actions.scaleTo(0.8f, 1.2f, shoot_frequency * 0.1f, Interpolation.circleOut), // Stretch forward
+            Actions.delay(0.1f), // Slight delay before shooting
+
+            Actions.scaleTo(1f, 1f, shoot_frequency * 0.2f, Interpolation.bounceOut), // Snap back after shooting
+
+            charge_shot_animation()
+        ));
+    }
+
+
+    private SequenceAction charge_shot_animation() {
+        return Actions.sequence(
+            Actions.scaleTo(1.4f, 0.6f, shoot_frequency * 0.5f, Interpolation.smooth), // Squash in anticipation
+            Actions.delay(0.2f) // Hold charge
+        );
     }
 }

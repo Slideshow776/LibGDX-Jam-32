@@ -124,13 +124,11 @@ public class LevelScreen extends BaseScreen {
             return super.touchDown(screenX, screenY, pointer, button);
         }
 
-        Vector2 world_coordinates = mainStage.getViewport().unproject(new Vector2(screenX, screenY));
+        Vector2 player_coordinates = new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2);
+        Vector2 mouse_position_in_world_coordinates = mainStage.getViewport().unproject(new Vector2(screenX, screenY));
         fire_projectile( // at the enemy
-            new Vector2(
-                player.getX() + player.getWidth() / 2,
-                player.getY() + player.getHeight() / 2
-            ),
-            new Vector2(world_coordinates),
+            player_coordinates,
+            mouse_position_in_world_coordinates,
             true
         );
         player.shoot();
@@ -139,11 +137,11 @@ public class LevelScreen extends BaseScreen {
 
 
     private void fire_projectile(Vector2 start_position, Vector2 end_position, boolean is_near_to_far) {
-        Projectile projectile = new Projectile(start_position.x, start_position.y, mainStage);
+        Projectile projectile = new Projectile(start_position, mainStage);
         if (is_near_to_far)
-            projectile.move_near_to_far(end_position.x, end_position.y, enemy.getScaleX());
+            projectile.move_near_to_far(end_position, enemy.getScaleX());
         else
-            projectile.move_far_to_near(end_position.x, end_position.y, enemy.getScaleX());
+            projectile.move_far_to_near(end_position, enemy.getScaleX());
     }
 
 
