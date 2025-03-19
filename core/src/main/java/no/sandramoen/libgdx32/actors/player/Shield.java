@@ -38,6 +38,7 @@ public class Shield extends BaseActor {
     public void activate() {
         AssetLoader.shield_up_sound.play(BaseGame.soundVolume);
         is_active = true;
+        clearActions();
         addAction(Actions.fadeIn(FADE_IN_DURATION, Interpolation.elastic));
     }
 
@@ -45,6 +46,7 @@ public class Shield extends BaseActor {
     public void deactivate() {
         AssetLoader.shield_down_sound.play(BaseGame.soundVolume);
         is_active = false;
+        clearActions();
         addAction(Actions.fadeOut(FADE_IN_DURATION, Interpolation.elastic));
     }
 

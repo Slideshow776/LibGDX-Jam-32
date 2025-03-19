@@ -28,6 +28,7 @@ public class Player extends BaseActor {
     public Shield shield;
     public int health = 33;
     public boolean is_able_to_shoot = true;
+    public boolean is_using_shield = false;
     public float shoot_frequency = SHOOT_COOL_DOWN;
 
     private float shoot_counter = shoot_frequency;
@@ -66,7 +67,8 @@ public class Player extends BaseActor {
     public void act(float delta) {
         super.act(delta);
         float_around_animation(delta);
-        handle_shoot_cooldown_timer(delta);
+        if (is_using_shield == false)
+            handle_shoot_cooldown_timer(delta);
     }
 
 
@@ -84,18 +86,20 @@ public class Player extends BaseActor {
         return new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                is_using_shield = true;
                 addAction(Actions.scaleTo(1.2f, 0.8f, Shield.FADE_IN_DURATION));
                 shield.activate();
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                is_using_shield = false;
+                shoot_counter = 0f;
                 addAction(Actions.scaleTo(1.0f, 1.0f, Shield.FADE_IN_DURATION));
                 shield.deactivate();
             }
         };
     }
-
 
 
     public void shoot() {

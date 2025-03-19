@@ -30,10 +30,11 @@ public class Enemy extends BaseActor {
     private final float SHOOT_FAST = 0.5f;
     private final float SHOOT_SLOW = 4.0f;
 
+    public int damage_modifier = DAMAGE_NORMAL;
+
     private float shoot_frequency = SHOOT_NORMAL;
     private float shoot_counter = 0f;
     private float elapsedTime = 0;
-    private int damage_modifier = 1;
     private SequenceAction shoot_animation;
 
 
@@ -67,15 +68,10 @@ public class Enemy extends BaseActor {
 
     public void setHealth(int new_health) {
         int temp = health;
-        health = new_health * damage_modifier;
+        health = new_health;
 
         if (temp > health) {
             take_damage();
-            /*addAction(Actions.sequence(
-                Actions.run(() -> take_damage()),
-                Actions.delay(move_duration),
-                Actions.run(() -> move())
-            ));*/
         } else if (temp < health) {
             heal();
         }

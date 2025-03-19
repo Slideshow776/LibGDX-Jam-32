@@ -75,8 +75,6 @@ public class LevelScreen extends BaseScreen {
         if (is_game_over)
             return;
 
-        player.shoot_frequency = enemy.move_duration;
-
         handle_enemy_shooting();
     }
 
@@ -123,7 +121,7 @@ public class LevelScreen extends BaseScreen {
                 if (player.is_able_to_shoot == false || is_game_over == true)
                     return false;
 
-                enemy.setHealth(enemy.health - 1);
+                enemy.setHealth(enemy.health - enemy.damage_modifier);
                 if (enemy.health <= 0)
                     set_game_over();
                 return true;
@@ -137,7 +135,7 @@ public class LevelScreen extends BaseScreen {
         if (is_game_over)
             return super.touchDown(screenX, screenY, pointer, button);
 
-        if (player.is_able_to_shoot == false) {
+        if (player.is_able_to_shoot == false || player.is_using_shield) {
             // TODO: play dud sound, unable to shoot
             return super.touchDown(screenX, screenY, pointer, button);
         }
