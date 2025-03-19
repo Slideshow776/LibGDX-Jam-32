@@ -138,7 +138,7 @@ public class Enemy extends BaseActor {
         getStage().addActor(effect);
         effect.start();
 
-        // movement animation
+        // take damage animation
         addAction(Actions.sequence(
             Actions.scaleTo(1.1f, 0.9f, move_duration * (1 / 5f)),
             //Wobble.shakeCamera(0.75f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f),
@@ -174,10 +174,10 @@ public class Enemy extends BaseActor {
         float move_duration = MathUtils.random(0.2f, 1.0f);
 
         // Execute the action with the new position
-        removeAction(shoot_animation);
+        //removeAction(shoot_animation);
         addAction(Actions.parallel(
-            Actions.moveTo(x, y, move_duration, Interpolation.circleOut),
-            Actions.scaleTo(scale, scale, move_duration, Interpolation.circleOut)
+            Actions.moveTo(x, y, move_duration, Interpolation.circleOut)/*,
+            Actions.scaleTo(scale, scale, move_duration, Interpolation.circleOut)*/
         ));
     }
 

@@ -30,7 +30,8 @@ public class LevelScreen extends BaseScreen {
     private HUD hud;
     private Array<ParallaxBackground> parallax_backgrounds;
 
-    private final boolean IS_MUSIC_ENABLED = true;
+    private final boolean IS_MUSIC_ENABLED = false;
+    private final boolean IS_SOUNDS_ENABLED = false;
     private final float PHASE_SHIFT_DURATION = 20f;
 
     private boolean is_game_over = false;
@@ -47,6 +48,10 @@ public class LevelScreen extends BaseScreen {
         if (IS_MUSIC_ENABLED) AssetLoader.levelMusic.play();
         AssetLoader.ambientMusic.setLooping(true);
         if (IS_MUSIC_ENABLED) AssetLoader.ambientMusic.play();
+
+        // sounds
+        if (!IS_SOUNDS_ENABLED)
+            BaseGame.soundVolume = 0f;
 
         //Gdx.input.setCursorCatched(true);
 
