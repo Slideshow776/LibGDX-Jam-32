@@ -60,18 +60,8 @@ public class ParallaxBackground extends BaseActor {
     }
 
 
-    public void reverse() {
-        speed *= -1;
-    }
-
-
-    public void speed_up() {
-        multiplier = 2;
-    }
-
-
-    public void normal_speed() {
-        multiplier = 1;
-    }
-
+    public void reverse() { speed *= -1; }
+    public void speed_up() { multiplier = 2; }
+    public void normal_speed() { multiplier = 1; }
+    public void stop() { speed = 0; }
 }

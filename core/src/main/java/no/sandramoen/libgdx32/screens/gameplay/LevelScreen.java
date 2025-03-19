@@ -30,8 +30,8 @@ public class LevelScreen extends BaseScreen {
     private HUD hud;
     private Array<ParallaxBackground> parallax_backgrounds;
 
-    private final boolean IS_MUSIC_ENABLED = false;
-    private final boolean IS_SOUNDS_ENABLED = false;
+    private final boolean IS_MUSIC_ENABLED = true;
+    private final boolean IS_SOUNDS_ENABLED = true;
     private final float PHASE_SHIFT_DURATION = 20f;
 
     private boolean is_game_over = false;
@@ -53,7 +53,7 @@ public class LevelScreen extends BaseScreen {
         if (!IS_SOUNDS_ENABLED)
             BaseGame.soundVolume = 0f;
 
-        //Gdx.input.setCursorCatched(true);
+        // Gdx.input.setCursorCatched(true);
 
         phase_damage_and_tough();
         Actor phase_timer = new Actor();
@@ -169,6 +169,8 @@ public class LevelScreen extends BaseScreen {
 
     private void set_game_over() {
         is_game_over = true;
+        for (ParallaxBackground background : parallax_backgrounds)
+            background.stop();
     }
 
 
