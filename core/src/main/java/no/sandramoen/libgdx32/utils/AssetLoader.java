@@ -9,8 +9,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.github.tommyettinger.textra.FWSkin;
@@ -27,7 +25,12 @@ public class AssetLoader implements AssetErrorListener {
     public static String shockwaveShader;
     public static String backgroundShader;
 
-    //public static Sound click1Sound;
+    public static Sound player_shoot_0_sound;
+    public static Sound player_heart_beat_sound;
+    public static Sound shield_up_sound;
+    public static Sound shield_down_sound;
+    public static Sound shield_hit_sound;
+    public static Sound enemy_shoot_0_sound;
 
     public static Array<Music> music;
     public static Music levelMusic;
@@ -68,7 +71,12 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager.load("audio/music/ambient_wind.wav", Music.class);
 
         // sounds
-        //BaseGame.assetManager.load("audio/sound/click1.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/player/heart_beat.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/player/shield_down.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/player/shield_up.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/player/shield_hit.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/enemy/laser_0.wav", Sound.class);
 
         // i18n
 
@@ -100,7 +108,12 @@ public class AssetLoader implements AssetErrorListener {
         music.add(levelMusic);
 
         // sounds
-        //click1Sound = BaseGame.assetManager.get("audio/sound/click1.wav", Sound.class);
+        player_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
+        player_heart_beat_sound = BaseGame.assetManager.get("audio/sounds/player/heart_beat.wav", Sound.class);
+        shield_up_sound = BaseGame.assetManager.get("audio/sounds/player/shield_up.wav", Sound.class);
+        shield_down_sound = BaseGame.assetManager.get("audio/sounds/player/shield_down.wav", Sound.class);
+        shield_hit_sound = BaseGame.assetManager.get("audio/sounds/player/shield_hit.wav", Sound.class);
+        enemy_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/enemy/laser_0.wav", Sound.class);
 
         // i18n
 

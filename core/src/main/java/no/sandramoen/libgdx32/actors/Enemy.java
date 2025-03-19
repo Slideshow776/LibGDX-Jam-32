@@ -17,13 +17,15 @@ public class Enemy extends BaseActor {
     public static final float MIN_MOVE_DURATION = 0.25f;
     public static final float MAX_MOVE_DURATION = 0.75f;
 
-    public int health = 3;
+    public int health = 33;
     public float move_duration = 0f;
     public boolean is_able_to_shoot = true;
 
     private float shoot_frequency = 2.0f;
     private float shoot_counter = 0f;
     private float elapsedTime = 0;
+
+    private SequenceAction shoot_animation;
 
 
     public Enemy(float x, float y, Stage s) {
@@ -119,6 +121,7 @@ public class Enemy extends BaseActor {
         float move_duration = MathUtils.random(0.2f, 1.0f);
 
         // Execute the action with the new position
+        removeAction(shoot_animation);
         addAction(Actions.parallel(
             Actions.moveTo(x, y, move_duration, Interpolation.circleOut),
             Actions.scaleTo(scale, scale, move_duration, Interpolation.circleOut)
@@ -159,14 +162,16 @@ public class Enemy extends BaseActor {
 
 
     private void shoot_animation() {
-        addAction(Actions.sequence(
+        shoot_animation = Actions.sequence(
             Actions.scaleTo(0.8f, 1.2f, shoot_frequency * 0.1f, Interpolation.circleOut), // Stretch forward
             Actions.delay(0.1f), // Slight delay before shooting
 
             Actions.scaleTo(1f, 1f, shoot_frequency * 0.2f, Interpolation.bounceOut), // Snap back after shooting
 
             charge_shot_animation()
-        ));
+        );
+
+        addAction(shoot_animation);
     }
 
 

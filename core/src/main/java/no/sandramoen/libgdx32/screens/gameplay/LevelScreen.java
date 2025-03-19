@@ -26,7 +26,7 @@ public class LevelScreen extends BaseScreen {
     Enemy enemy;
     HUD hud;
 
-    private final boolean IS_MUSIC_ENABLED = false;
+    private final boolean IS_MUSIC_ENABLED = true;
 
     private boolean is_game_over = false;
 
@@ -131,6 +131,7 @@ public class LevelScreen extends BaseScreen {
             mouse_position_in_world_coordinates,
             true
         );
+        AssetLoader.player_shoot_0_sound.play(BaseGame.soundVolume);
         player.shoot();
         return super.touchDown(screenX, screenY, pointer, button);
     }
@@ -169,12 +170,17 @@ public class LevelScreen extends BaseScreen {
                 false
             );
 
+            AssetLoader.enemy_shoot_0_sound.play(BaseGame.soundVolume);
+
 
             if (player.shield.is_active == false) {
+                AssetLoader.player_heart_beat_sound.play(1f);
                 player.setHealth(player.health - 1);
                 hud.fade_in_and_out();
                 if (player.health <= 0)
                     set_game_over();
+            } else {
+                player.shield.endure();
             }
         }
     }

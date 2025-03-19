@@ -26,11 +26,11 @@ public class Player extends BaseActor {
 
     public Sprite arm;
     public Shield shield;
-    public int health = 3;
+    public int health = 33;
     public boolean is_able_to_shoot = true;
     public float shoot_frequency = Enemy.MAX_MOVE_DURATION;
-    private float shoot_counter = shoot_frequency;
 
+    private float shoot_counter = shoot_frequency;
     private static final String ARM_NAME = "player/arm_test";
     private Vector3 temp = new Vector3();
     private float elapsedTime = 0;
@@ -86,17 +86,16 @@ public class Player extends BaseActor {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 addAction(Actions.scaleTo(1.2f, 0.8f, Shield.FADE_IN_DURATION));
                 shield.activate();
-                super.enter(event, x, y, pointer, fromActor);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 addAction(Actions.scaleTo(1.0f, 1.0f, Shield.FADE_IN_DURATION));
                 shield.deactivate();
-                super.exit(event, x, y, pointer, toActor);
             }
         };
     }
+
 
 
     public void shoot() {
