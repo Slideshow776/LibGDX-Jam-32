@@ -11,6 +11,9 @@ import no.sandramoen.libgdx32.utils.BaseActor;
 
 public class Projectile extends BaseActor {
 
+    private final float MOVE_DURATION = 0.25f;
+
+
     public Projectile(Vector2 position, Stage stage) {
         super(position.x, position.y, stage);
         loadImage("projectile");
@@ -26,7 +29,7 @@ public class Projectile extends BaseActor {
         final_scale = MathUtils.clamp(final_scale,0.1f,0.2f);
 
         float duration = 0.15f + (1 - enemy_scale);
-        duration = MathUtils.clamp(duration, 0.1f, Enemy.MIN_MOVE_DURATION);
+        duration = MathUtils.clamp(duration, 0.1f, MOVE_DURATION);
 
         addAction(Actions.parallel(
             Actions.scaleTo(final_scale, final_scale, duration * 1.1f),
@@ -43,7 +46,7 @@ public class Projectile extends BaseActor {
         float final_scale = 1f;
 
         float duration = 0.3f + (1 - enemy_scale);
-        duration = MathUtils.clamp(duration, 0.1f, Enemy.MIN_MOVE_DURATION);
+        duration = MathUtils.clamp(duration, 0.1f, MOVE_DURATION);
 
         addAction(Actions.parallel(
             Actions.scaleTo(final_scale, final_scale, duration * 1.1f),

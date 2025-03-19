@@ -14,17 +14,26 @@ import no.sandramoen.libgdx32.utils.BaseGame;
 
 public class Enemy extends BaseActor {
 
-    public static final float MIN_MOVE_DURATION = 0.25f;
-    public static final float MAX_MOVE_DURATION = 0.75f;
-
     public int health = 33;
     public float move_duration = 0f;
     public boolean is_able_to_shoot = true;
 
-    private float shoot_frequency = 2.0f;
+    public enum Magic {LIGHTNING, FIRE, DEATH}
+    public Magic current_magic = Magic.FIRE;
+
+    private final float MOVE_NORMAL = 0.5f;
+    private final float MOVE_FAST = 0.25f;
+    private final int DAMAGE_LESS = 1;
+    private final int DAMAGE_NORMAL = 2;
+    private final int DAMAGE_EXTRA = 4;
+    private final float SHOOT_NORMAL = 2.0f;
+    private final float SHOOT_FAST = 0.5f;
+    private final float SHOOT_SLOW = 4.0f;
+
+    private float shoot_frequency = SHOOT_NORMAL;
     private float shoot_counter = 0f;
     private float elapsedTime = 0;
-
+    private int damage_modifier = 1;
     private SequenceAction shoot_animation;
 
 
@@ -38,6 +47,13 @@ public class Enemy extends BaseActor {
         //setDebug(true);
 
         addAction(charge_shot_animation());
+
+        move_duration = MOVE_NORMAL;
+        addAction(Actions.forever(Actions.sequence(
+            Actions.delay(2f),
+            Actions.delay(move_duration),
+            Actions.run(() -> move())
+        )));
     }
 
 
@@ -51,21 +67,62 @@ public class Enemy extends BaseActor {
 
     public void setHealth(int new_health) {
         int temp = health;
-        health = new_health;
+        health = new_health * damage_modifier;
 
         if (temp > health) {
-            move_duration = MathUtils.random(MIN_MOVE_DURATION, MAX_MOVE_DURATION);
-            addAction(Actions.sequence(
+            take_damage();
+            /*addAction(Actions.sequence(
                 Actions.run(() -> take_damage()),
                 Actions.delay(move_duration),
                 Actions.run(() -> move())
-            ));
+            ));*/
         } else if (temp < health) {
             heal();
         }
 
         if (health <= 0)
             die();
+    }
+
+
+    public void shoot_animation() {
+        shoot_animation = Actions.sequence(
+            Actions.scaleTo(0.8f, 1.2f, shoot_frequency * 0.1f, Interpolation.circleOut), // Stretch forward
+            Actions.delay(0.1f), // Slight delay before shooting
+
+            Actions.scaleTo(1f, 1f, shoot_frequency * 0.2f, Interpolation.bounceOut), // Snap back after shooting
+
+            charge_shot_animation()
+        );
+
+        addAction(shoot_animation);
+    }
+
+
+    public void phase_damage_and_speed() {
+        // moves around quickly, takes extra damage, attacks fast, lightning magic
+        move_duration = MOVE_FAST;
+        damage_modifier = DAMAGE_EXTRA;
+        shoot_frequency = SHOOT_FAST;
+        current_magic = Magic.LIGHTNING;
+    }
+
+
+    public void phase_speed_and_tough(float phase_duration) {
+        // moves around quickly, takes less damage, doesn't attack, death magic
+        move_duration = MOVE_FAST;
+        damage_modifier = DAMAGE_LESS;
+        shoot_frequency = phase_duration;
+        current_magic = Magic.DEATH;
+    }
+
+
+    public void phase_damage_and_tough(float phase_duration) {
+        // moves nothing, takes less damage, attacks slow, fire magic
+        move_duration = phase_duration;
+        damage_modifier = DAMAGE_NORMAL;
+        shoot_frequency = SHOOT_SLOW;
+        current_magic = Magic.FIRE;
     }
 
 
@@ -156,22 +213,7 @@ public class Enemy extends BaseActor {
         } else {
             shoot_counter = 0f;
             is_able_to_shoot = true;
-            shoot_animation();
         }
-    }
-
-
-    private void shoot_animation() {
-        shoot_animation = Actions.sequence(
-            Actions.scaleTo(0.8f, 1.2f, shoot_frequency * 0.1f, Interpolation.circleOut), // Stretch forward
-            Actions.delay(0.1f), // Slight delay before shooting
-
-            Actions.scaleTo(1f, 1f, shoot_frequency * 0.2f, Interpolation.bounceOut), // Snap back after shooting
-
-            charge_shot_animation()
-        );
-
-        addAction(shoot_animation);
     }
 
 

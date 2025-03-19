@@ -22,13 +22,13 @@ import no.sandramoen.libgdx32.utils.BaseActor;
 
 public class Player extends BaseActor {
 
-    public static final float SHOOT_COOL_DOWN = Enemy.MAX_MOVE_DURATION;
+    public static final float SHOOT_COOL_DOWN = 0.75f;
 
     public Sprite arm;
     public Shield shield;
     public int health = 33;
     public boolean is_able_to_shoot = true;
-    public float shoot_frequency = Enemy.MAX_MOVE_DURATION;
+    public float shoot_frequency = SHOOT_COOL_DOWN;
 
     private float shoot_counter = shoot_frequency;
     private static final String ARM_NAME = "player/arm_test";

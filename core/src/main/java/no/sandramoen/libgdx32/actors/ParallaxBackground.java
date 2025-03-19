@@ -12,10 +12,10 @@ import no.sandramoen.libgdx32.utils.BaseGame;
 
 public class ParallaxBackground extends BaseActor {
 
-    Image image1;
-    Image image2;
-    float speed;
-
+    private Image image1;
+    private Image image2;
+    private float speed;
+    private float multiplier = 1;
 
     public ParallaxBackground(float x, float y, Stage s, String image_path, float speed) {
         super(x, y, s);
@@ -41,13 +41,37 @@ public class ParallaxBackground extends BaseActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        image1.setPosition(image1.getX() + speed * delta, getY());
-        image2.setPosition(image2.getX() + speed * delta, getY());
+        image1.setPosition(image1.getX() + speed * multiplier * delta, getY());
+        image2.setPosition(image2.getX() + speed * multiplier * delta, getY());
 
-        if (image1.getX() + image1.getWidth() < 0)
-            image1.setPosition(getWidth(), getY());
+        if (speed < 0) {
+            if (image1.getX() + image1.getWidth() < 0)
+                image1.setPosition(getWidth(), getY());
 
-        if (image2.getX() + image2.getWidth() < 0)
-            image2.setPosition(getWidth(), getY());
+            if (image2.getX() + image2.getWidth() < 0)
+                image2.setPosition(getWidth(), getY());
+        } else {
+            if (image1.getX() > BaseGame.WORLD_WIDTH)
+                image1.setPosition(-getWidth(), getY());
+
+            if (image2.getX() > BaseGame.WORLD_WIDTH)
+                image2.setPosition(-getWidth(), getY());
+        }
     }
+
+
+    public void reverse() {
+        speed *= -1;
+    }
+
+
+    public void speed_up() {
+        multiplier = 2;
+    }
+
+
+    public void normal_speed() {
+        multiplier = 1;
+    }
+
 }

@@ -6,9 +6,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Array;
 
 import no.sandramoen.libgdx32.actors.player.HUD;
 import no.sandramoen.libgdx32.actors.ParallaxBackground;
@@ -22,11 +25,13 @@ import no.sandramoen.libgdx32.utils.BaseScreen;
 
 public class LevelScreen extends BaseScreen {
 
-    Player player;
-    Enemy enemy;
-    HUD hud;
+    private Player player;
+    private Enemy enemy;
+    private HUD hud;
+    private Array<ParallaxBackground> parallax_backgrounds;
 
     private final boolean IS_MUSIC_ENABLED = true;
+    private final float PHASE_SHIFT_DURATION = 20f;
 
     private boolean is_game_over = false;
 
@@ -44,6 +49,18 @@ public class LevelScreen extends BaseScreen {
         if (IS_MUSIC_ENABLED) AssetLoader.ambientMusic.play();
 
         //Gdx.input.setCursorCatched(true);
+
+        phase_damage_and_tough();
+        Actor phase_timer = new Actor();
+        phase_timer.addAction(Actions.forever(Actions.sequence(
+            Actions.delay(PHASE_SHIFT_DURATION),
+            Actions.run(() -> phase_damage_and_speed()),
+            Actions.delay(PHASE_SHIFT_DURATION),
+            Actions.run(() -> phase_speed_and_tough()),
+            Actions.delay(PHASE_SHIFT_DURATION),
+            Actions.run(() -> phase_damage_and_tough())
+        )));
+        mainStage.addActor(phase_timer);
     }
 
 
@@ -85,8 +102,9 @@ public class LevelScreen extends BaseScreen {
         sky_background.loadImage("parallax_backgrounds/-1");
         sky_background.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
 
+        parallax_backgrounds = new Array();
         for (int i = 0; i <= 4; i++)
-            new ParallaxBackground(0, 0, mainStage, "parallax_backgrounds/" + i, (i + 1) * -0.75f * (i + 0.05f));
+            parallax_backgrounds.add(new ParallaxBackground(0, 0, mainStage, "parallax_backgrounds/" + i, (i + 1) * -0.75f * (i + 0.05f)));
 
         // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
@@ -171,6 +189,7 @@ public class LevelScreen extends BaseScreen {
             );
 
             AssetLoader.enemy_shoot_0_sound.play(BaseGame.soundVolume);
+            enemy.shoot_animation();
 
 
             if (player.shield.is_active == false) {
@@ -198,6 +217,39 @@ public class LevelScreen extends BaseScreen {
             if (AssetLoader.levelMusic.getVolume() < 0.75f)
                 AssetLoader.levelMusic.setVolume(MathUtils.clamp(AssetLoader.levelMusic.getVolume() + delta * 0.05f, 0f, 1f));
         }
+    }
+
+
+    private void phase_damage_and_speed() {
+        // moves around quickly, takes extra damage, attacks fast, lightning magic
+        System.out.println("phase_damage_and_speed");
+        enemy.phase_damage_and_speed();
+        for (ParallaxBackground background : parallax_backgrounds) {
+            background.speed_up();
+            background.reverse();
+        }
+    }
+
+
+    private void phase_speed_and_tough() {
+        // moves around quickly, takes less damage, doesn't attack, death magic
+        System.out.println("phase_speed_and_tough");
+        enemy.phase_speed_and_tough(PHASE_SHIFT_DURATION);
+        for (ParallaxBackground background : parallax_backgrounds) {
+            background.normal_speed();
+            background.reverse();
+        }
+    }
+
+    private void phase_damage_and_tough() {
+        // moves nothing, takes less damage, attacks slow, fire magic
+        System.out.println("phase_damage_and_tough");
+        enemy.phase_damage_and_tough(PHASE_SHIFT_DURATION);
+        for (ParallaxBackground background : parallax_backgrounds) {
+            background.normal_speed();
+            background.reverse();
+        }
+
     }
 
 
