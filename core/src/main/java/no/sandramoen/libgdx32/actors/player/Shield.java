@@ -9,9 +9,9 @@ import no.sandramoen.libgdx32.utils.BaseActor;
 
 public class Shield extends BaseActor {
 
-    public boolean is_active = false;
+    public static final float FADE_IN_DURATION = 0.5f;
 
-    private final float FADE_IN_DURATION = 1.5f;
+    public boolean is_active = false;
 
 
     public Shield(float x, float y, Stage stage) {

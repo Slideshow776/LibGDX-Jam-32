@@ -90,7 +90,6 @@ public class LevelScreen extends BaseScreen {
 
         // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
-        player.shield.activate(); // TODO: remove this, only for debugging
 
         enemy = new Enemy(BaseGame.WORLD_WIDTH / 2, 13f, mainStage);
         enemy.addListener(onEnemyTouched());
@@ -160,7 +159,6 @@ public class LevelScreen extends BaseScreen {
 
     private void handle_enemy_shooting() {
         if (enemy.is_able_to_shoot == true){
-
             Vector2 source = new Vector2(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2);
             Vector2 target = new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2);
 

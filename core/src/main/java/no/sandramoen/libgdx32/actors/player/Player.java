@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
@@ -52,6 +56,8 @@ public class Player extends BaseActor {
         shield = new Shield(-2f, 8f, getStage());
         addActor(shield);
 
+        addListener(onEnterExit());
+
         //setDebug(true);
     }
 
@@ -74,6 +80,25 @@ public class Player extends BaseActor {
     }
 
 
+    private EventListener onEnterExit() {
+        return new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                addAction(Actions.scaleTo(1.2f, 0.8f, Shield.FADE_IN_DURATION));
+                shield.activate();
+                super.enter(event, x, y, pointer, fromActor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                addAction(Actions.scaleTo(1.0f, 1.0f, Shield.FADE_IN_DURATION));
+                shield.deactivate();
+                super.exit(event, x, y, pointer, toActor);
+            }
+        };
+    }
+
+
     public void shoot() {
         shoot_counter = 0f;
 
@@ -83,6 +108,7 @@ public class Player extends BaseActor {
             Actions.scaleTo(1.0f, 1.0f, SHOOT_COOL_DOWN * (4f / 5f), Interpolation.bounceOut)
         ));
     }
+
 
     public void setHealth(int new_health) {
         int temp = health;
