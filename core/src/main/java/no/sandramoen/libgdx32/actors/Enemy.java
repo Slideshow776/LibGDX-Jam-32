@@ -1,5 +1,6 @@
 package no.sandramoen.libgdx32.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -119,6 +120,21 @@ public class Enemy extends BaseActor {
         damage_modifier = DAMAGE_NORMAL;
         shoot_frequency = SHOOT_SLOW;
         current_magic = Magic.FIRE;
+    }
+
+
+    public String get_projectile_image_path_for(Enemy.Magic magic) {
+        switch (magic) {
+            case FIRE:
+                return "enemy/fire_projectile";
+            case LIGHTNING:
+                return "enemy/lightning_projectile";
+            case DEATH:
+                return "enemy/death_projectile";
+            default:
+                Gdx.app.error("Projectile.java", "Error: Unknown magic type " + magic);
+                return "player/projectile";
+        }
     }
 
 

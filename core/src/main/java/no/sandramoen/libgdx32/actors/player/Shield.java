@@ -8,7 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 
+import no.sandramoen.libgdx32.actors.particles.HitEffect;
+import no.sandramoen.libgdx32.actors.particles.ShieldEffect;
 import no.sandramoen.libgdx32.utils.AssetLoader;
 import no.sandramoen.libgdx32.utils.BaseActor;
 import no.sandramoen.libgdx32.utils.BaseGame;
@@ -52,6 +55,16 @@ public class Shield extends BaseActor {
 
 
     public void endure() {
+        // particle effect, left to right
+        add_effect(new Vector2(1.2f, getHeight() * 0.18f));
+        add_effect(new Vector2(2, getHeight() * 0.38f));
+        add_effect(new Vector2(getWidth() * 0.4f, getHeight() * 0.63f));
+        add_effect(new Vector2(getWidth() * 0.5f, getHeight() * 0.68f));
+        add_effect(new Vector2(getWidth() * 0.6f, getHeight() * 0.63f));
+        add_effect(new Vector2(getWidth() - 1.5f, getHeight() * 0.38f));
+        add_effect(new Vector2(getWidth() - 0.5f, getHeight() * 0.18f));
+
+        // animation
         addAction(Actions.sequence(
             Actions.delay(0.1f),
             Actions.run(() -> AssetLoader.shield_hit_sound.play(BaseGame.soundVolume))
@@ -73,5 +86,14 @@ public class Shield extends BaseActor {
                 Actions.color(new Color(1f, 1f, 1f, 1f), restore_duration, Interpolation.elastic)
             )
         ));
+    }
+
+    private ShieldEffect add_effect(Vector2 position) {
+        ShieldEffect effect = new ShieldEffect();
+        effect.setPosition(position.x, position.y);
+        effect.setScale(0.005f);
+        addActor(effect);
+        effect.start();
+        return effect;
     }
 }

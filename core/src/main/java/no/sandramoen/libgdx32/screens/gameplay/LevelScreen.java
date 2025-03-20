@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 
+import no.sandramoen.libgdx32.actors.particles.HitEffect;
 import no.sandramoen.libgdx32.actors.player.HUD;
 import no.sandramoen.libgdx32.actors.ParallaxBackground;
 import no.sandramoen.libgdx32.actors.Enemy;
@@ -35,7 +36,6 @@ public class LevelScreen extends BaseScreen {
     private final float PHASE_SHIFT_DURATION = 20f;
 
     private boolean is_game_over = false;
-
 
 
     public LevelScreen() {
@@ -150,7 +150,8 @@ public class LevelScreen extends BaseScreen {
         fire_projectile( // at the enemy
             player_coordinates,
             mouse_position_in_world_coordinates,
-            true
+            true,
+            "player/projectile"
         );
         AssetLoader.player_shoot_0_sound.play(BaseGame.soundVolume);
         player.shoot();
@@ -158,8 +159,8 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void fire_projectile(Vector2 start_position, Vector2 end_position, boolean is_near_to_far) {
-        Projectile projectile = new Projectile(start_position, mainStage);
+    private void fire_projectile(Vector2 start_position, Vector2 end_position, boolean is_near_to_far, String image_path) {
+        Projectile projectile = new Projectile(start_position, mainStage, image_path);
         if (is_near_to_far)
             projectile.move_near_to_far(end_position, enemy.getScaleX());
         else
@@ -184,13 +185,21 @@ public class LevelScreen extends BaseScreen {
             Vector2 source = new Vector2(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2);
             Vector2 target = new Vector2(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2);
 
-            if (player.shield.is_active)
+            if (player.shield.is_active) {
                 target = new Vector2(player.shield.getX() + MathUtils.random(4f, 9f), player.shield.getY() + MathUtils.random(-1f, 1f));
+
+                HitEffect effect = new HitEffect();
+                effect.setPosition(target.x, target.y - MathUtils.random(1.5f, 2.0f));
+                effect.setScale(0.005f);
+                mainStage.addActor(effect);
+                effect.start();
+            }
 
             fire_projectile( // at the player
                 source,
                 target,
-                false
+                false,
+                enemy.get_projectile_image_path_for(enemy.current_magic)
             );
 
             AssetLoader.enemy_shoot_0_sound.play(BaseGame.soundVolume);
@@ -227,7 +236,6 @@ public class LevelScreen extends BaseScreen {
 
     private void phase_damage_and_speed() {
         // moves around quickly, takes extra damage, attacks fast, lightning magic
-        System.out.println("phase_damage_and_speed");
         enemy.phase_damage_and_speed();
         for (ParallaxBackground background : parallax_backgrounds) {
             background.speed_up();
@@ -238,7 +246,6 @@ public class LevelScreen extends BaseScreen {
 
     private void phase_speed_and_tough() {
         // moves around quickly, takes less damage, doesn't attack, death magic
-        System.out.println("phase_speed_and_tough");
         enemy.phase_speed_and_tough(PHASE_SHIFT_DURATION);
         for (ParallaxBackground background : parallax_backgrounds) {
             background.normal_speed();
@@ -246,9 +253,9 @@ public class LevelScreen extends BaseScreen {
         }
     }
 
+
     private void phase_damage_and_tough() {
         // moves nothing, takes less damage, attacks slow, fire magic
-        System.out.println("phase_damage_and_tough");
         enemy.phase_damage_and_tough(PHASE_SHIFT_DURATION);
         for (ParallaxBackground background : parallax_backgrounds) {
             background.normal_speed();

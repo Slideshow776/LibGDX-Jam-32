@@ -1,5 +1,6 @@
 package no.sandramoen.libgdx32.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,9 +15,9 @@ public class Projectile extends BaseActor {
     private final float MOVE_DURATION = 0.25f;
 
 
-    public Projectile(Vector2 position, Stage stage) {
+    public Projectile(Vector2 position, Stage stage, String image_path) {
         super(position.x, position.y, stage);
-        loadImage("projectile");
+        loadImage(image_path);
 
         setSize(2, 2);
         centerAtPosition(position.x, position.y);
