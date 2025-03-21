@@ -16,6 +16,7 @@ public class ParallaxBackground extends BaseActor {
     private Image image2;
     private float speed;
     private float multiplier = 1;
+    private float y_offset = 0.75f;
 
     public ParallaxBackground(float x, float y, Stage s, String image_path, float speed) {
         super(x, y, s);
@@ -41,18 +42,18 @@ public class ParallaxBackground extends BaseActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        image1.setPosition(image1.getX() + speed * multiplier * delta, getY());
-        image2.setPosition(image2.getX() + speed * multiplier * delta, getY());
+        image1.setPosition(image1.getX() + speed * multiplier * delta, getY() - y_offset);
+        image2.setPosition(image2.getX() + speed * multiplier * delta, getY() - y_offset);
 
         if (image1.getX() + BaseGame.WORLD_WIDTH < 0)
-            image1.setPosition(image2.getX() + BaseGame.WORLD_WIDTH, getY());
+            image1.setPosition(image2.getX() + BaseGame.WORLD_WIDTH, getY() - y_offset);
         else if (image1.getX() > BaseGame.WORLD_WIDTH)
-            image1.setPosition(image2.getX() - BaseGame.WORLD_WIDTH, getY());
+            image1.setPosition(image2.getX() - BaseGame.WORLD_WIDTH, getY() - y_offset);
 
         if (image2.getX() + BaseGame.WORLD_WIDTH < 0)
-            image2.setPosition(image1.getX() + BaseGame.WORLD_WIDTH, getY());
+            image2.setPosition(image1.getX() + BaseGame.WORLD_WIDTH, getY() - y_offset);
         else if (image2.getX() > BaseGame.WORLD_WIDTH)
-            image2.setPosition(image1.getX() - BaseGame.WORLD_WIDTH, getY());
+            image2.setPosition(image1.getX() - BaseGame.WORLD_WIDTH, getY() - y_offset);
     }
 
 
