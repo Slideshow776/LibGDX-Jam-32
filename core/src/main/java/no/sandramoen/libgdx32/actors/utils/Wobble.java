@@ -1,5 +1,8 @@
 package no.sandramoen.libgdx32.actors.utils;
 
+import static no.sandramoen.libgdx32.utils.BaseGame.WORLD_HEIGHT;
+import static no.sandramoen.libgdx32.utils.BaseGame.WORLD_WIDTH;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;

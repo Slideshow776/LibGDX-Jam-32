@@ -103,7 +103,8 @@ public class LevelScreen extends BaseScreen {
         // background
         BaseActor sky_background = new BaseActor(0f, 0f, mainStage);
         sky_background.loadImage("parallax_backgrounds/-1");
-        sky_background.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
+        sky_background.setSize(BaseGame.WORLD_WIDTH + 2, BaseGame.WORLD_HEIGHT + 2);
+        sky_background.setPosition(sky_background.getX() - 1, sky_background.getY() - 1);
 
         parallax_backgrounds = new Array();
         for (int i = 0; i <= 4; i++)

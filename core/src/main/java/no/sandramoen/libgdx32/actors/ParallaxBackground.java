@@ -25,14 +25,14 @@ public class ParallaxBackground extends BaseActor {
         setTouchable(Touchable.disabled);
 
         image1 = new Image(AssetLoader.textureAtlas.findRegion(image_path));
-        image1.setSize(getWidth(), getHeight());
+        image1.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
         image1.setOrigin(Align.center);
         image1.setScaleX(1.1f);
         addActor(image1);
 
         image2 = new Image(AssetLoader.textureAtlas.findRegion(image_path));
-        image2.setSize(getWidth(), getHeight());
-        image2.setPosition(getWidth(), getY());
+        image2.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
+        image2.setPosition(BaseGame.WORLD_WIDTH, getY());
         image2.setOrigin(Align.center);
         image2.setScaleX(1.1f);
         addActor(image2);
@@ -44,19 +44,15 @@ public class ParallaxBackground extends BaseActor {
         image1.setPosition(image1.getX() + speed * multiplier * delta, getY());
         image2.setPosition(image2.getX() + speed * multiplier * delta, getY());
 
-        if (speed < 0) {
-            if (image1.getX() + image1.getWidth() < 0)
-                image1.setPosition(getWidth(), getY());
+        if (image1.getX() + BaseGame.WORLD_WIDTH < 0)
+            image1.setPosition(image2.getX() + BaseGame.WORLD_WIDTH, getY());
+        else if (image1.getX() > BaseGame.WORLD_WIDTH)
+            image1.setPosition(image2.getX() - BaseGame.WORLD_WIDTH, getY());
 
-            if (image2.getX() + image2.getWidth() < 0)
-                image2.setPosition(getWidth(), getY());
-        } else {
-            if (image1.getX() > BaseGame.WORLD_WIDTH)
-                image1.setPosition(-getWidth(), getY());
-
-            if (image2.getX() > BaseGame.WORLD_WIDTH)
-                image2.setPosition(-getWidth(), getY());
-        }
+        if (image2.getX() + BaseGame.WORLD_WIDTH < 0)
+            image2.setPosition(image1.getX() + BaseGame.WORLD_WIDTH, getY());
+        else if (image2.getX() > BaseGame.WORLD_WIDTH)
+            image2.setPosition(image1.getX() - BaseGame.WORLD_WIDTH, getY());
     }
 
 
