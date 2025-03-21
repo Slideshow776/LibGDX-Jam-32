@@ -138,7 +138,7 @@ public class Player extends BaseActor {
 
 
     private void take_damage() {
-        addAction(Wobble.shakeCamera(0.6f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f));
+        addAction(Wobble.shakeCamera(0.75f, Interpolation.linear, getStage().getCamera(), 9f, 0.5f));
     }
 
 
