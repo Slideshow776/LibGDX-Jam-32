@@ -1,5 +1,8 @@
 package no.sandramoen.libgdx32.actors.utils;
 
+import static no.sandramoen.libgdx32.utils.BaseGame.WORLD_HEIGHT;
+import static no.sandramoen.libgdx32.utils.BaseGame.WORLD_WIDTH;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -50,9 +53,10 @@ public class Wobble {
             float xMove = 0f, yMove = 0f, startTime = 0f, camX = 0f, camY = 0f;
             @Override
             protected void begin() {
-                startTime = (TimeUtils.millis() & 0xFFFFFL) * 0.001f;
-                camX = cam.position.x;
-                camY = cam.position.y;
+                startTime = (TimeUtils.millis() & 0xFFFFFL);
+                camX = WORLD_WIDTH / 2f - 0.5f;
+                camY = WORLD_HEIGHT / 2f - 0.5f;
+//                System.out.println("at time " + (startTime * 0.001f) + ", cam position is " + cam.position);
                 super.begin();
             }
 

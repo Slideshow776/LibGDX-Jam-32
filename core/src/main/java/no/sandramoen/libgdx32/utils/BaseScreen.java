@@ -20,7 +20,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen() {
         mainStage = new Stage();
-        mainStage.setViewport(new FillViewport(BaseGame.WORLD_WIDTH - 1f, BaseGame.WORLD_HEIGHT - 1f));
+        mainStage.setViewport(new ExtendViewport(BaseGame.WORLD_WIDTH - 1f, BaseGame.WORLD_HEIGHT - 1f));
         mainStage.getCamera().position.add(0.5f, 0.5f, 0f);
 
         uiTable = new Table();
@@ -44,7 +44,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
             update(delta);
         }
 
-        Gdx.gl.glClearColor(0.102f, 0.071f, 0.149f, 1f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mainStage.getViewport().apply();
