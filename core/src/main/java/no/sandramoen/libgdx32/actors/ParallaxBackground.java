@@ -27,14 +27,14 @@ public class ParallaxBackground extends BaseActor {
         image1 = new Image(AssetLoader.textureAtlas.findRegion(image_path));
         image1.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
         image1.setOrigin(Align.center);
-        image1.setScaleX(1.1f);
+        image1.setScale(1.1f);
         addActor(image1);
 
         image2 = new Image(AssetLoader.textureAtlas.findRegion(image_path));
         image2.setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
         image2.setPosition(BaseGame.WORLD_WIDTH, getY());
         image2.setOrigin(Align.center);
-        image2.setScaleX(1.1f);
+        image2.setScale(1.1f);
         addActor(image2);
     }
 
