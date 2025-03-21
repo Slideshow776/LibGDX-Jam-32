@@ -29,8 +29,8 @@ public abstract class BaseGame extends Game implements AssetErrorListener {
     public static float musicVolume = .1f;
     public static float vibrationStrength = 1f;
     public static final float UNIT_SCALE = 1 / 16f;
-    public static final float WORLD_WIDTH = 9f;
-    public static final float WORLD_HEIGHT = 16f;
+    public static final float WORLD_WIDTH = 11f;
+    public static final float WORLD_HEIGHT = 18f;
 
     public static int health = 100;
     public static int mana = 0;

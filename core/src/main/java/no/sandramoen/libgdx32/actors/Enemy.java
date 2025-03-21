@@ -164,12 +164,12 @@ public class Enemy extends BaseActor {
 
 
     private void move() { // made by chatgpt, tweaked by me
-        float centerX = BaseGame.WORLD_WIDTH / 2 - getWidth() / 2;
-        float centerY = 12.5f;
+        float centerX = (BaseGame.WORLD_WIDTH - 1) / 2 + 0.5f - getWidth() / 2;
+        float centerY = 11f;
 
         float random_angle = MathUtils.random(0f, MathUtils.PI2);
         float random_radius = MathUtils.random(0.9f, 1.4f); // Random radius for movement
-        float stretchFactorX = 2.7f; // Stretched along the x-axis (e.g., 1.5 means the ellipse is 1.5 times wider than the circle)
+        float stretchFactorX = 2.14f; // Stretched along the x-axis (e.g., 1.5 means the ellipse is 1.5 times wider than the circle)
 
         // Convert polar to Cartesian coordinates
         float x = centerX + random_radius * stretchFactorX * MathUtils.cos(random_angle); // Apply stretch on x

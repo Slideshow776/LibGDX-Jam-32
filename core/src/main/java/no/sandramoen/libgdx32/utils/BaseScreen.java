@@ -7,8 +7,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
@@ -20,8 +22,10 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen() {
         mainStage = new Stage();
-        mainStage.setViewport(new FillViewport(BaseGame.WORLD_WIDTH - 1f, BaseGame.WORLD_HEIGHT - 1f));
-        mainStage.getCamera().position.add(0.5f, 0.5f, 0f);
+//        mainStage.setViewport(new FillViewport(BaseGame.WORLD_WIDTH - 1f, BaseGame.WORLD_HEIGHT - 1f));
+//        mainStage.getCamera().position.add(0.5f, 0.5f, 0f);
+        mainStage.setViewport(new ScalingViewport(Scaling.fillY, BaseGame.WORLD_WIDTH - 2f, BaseGame.WORLD_HEIGHT - 2f));
+        mainStage.getCamera().position.add(1f, 1f, 0f);
 
         uiTable = new Table();
         uiTable.setFillParent(true);
