@@ -59,7 +59,6 @@ public class Wobble {
                 startTime = (TimeUtils.millis() & 0xFFFFFL);
                 camX = WORLD_WIDTH / 2f - 0.5f;
                 camY = WORLD_HEIGHT / 2f - 0.5f;
-//                System.out.println("at time " + (startTime * 0.001f) + ", cam position is " + cam.position);
                 super.begin();
             }
 
